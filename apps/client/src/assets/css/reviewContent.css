@@ -1,0 +1,78 @@
+.list-talk1 .history {
+  @apply sticky bottom-0 w-full /*min-h-[5rem] max-h-[11.1rem] overflow-auto*/;
+}
+
+.list-talk1 .history li {
+  @apply flex-row-reverse my-4 flex flex-1 text-base mx-auto gap-5;
+}
+.list-talk1 .history li .profile {
+  @apply w-[50px] h-[50px] flex-shrink-0 flex flex-col relative items-end overflow-hidden rounded-lg;
+}
+.list-talk1 .history li .profile img {
+  @apply w-full h-full object-cover;
+}
+.list-talk1 .history li .info {
+  @apply relative flex w-full flex-col p-2 px-3 rounded-lg rounded-tr-none bg-[var(--highlight-color)] text-white shadow-lg;
+}
+.list-talk1 .history li.ai {
+  @apply flex-row;
+}
+.list-talk1 .history li.ai .info {
+  @apply items-start text-inherit rounded-lg rounded-tl-none bg-[var(--bg-highlight-color)];
+}
+.list-talk1 .history li:not(.ai) .info {
+  @apply items-end;
+}
+.list-talk1 .history li .info .message {
+  @apply whitespace-pre-wrap;
+}
+.list-talk1 .history li.user .info .message {
+  @apply text-right;
+}
+.list-talk1 .history li .info:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 10px;
+  height: 20px;
+  background-color: var(--bubble-bg-ov);
+}
+.list-talk1 .history li .info:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 10px;
+  height: 20px;
+  border-radius: 20px 0 0;
+  background-color: white;
+}
+.list-talk1 .history li.ai .info:before {
+  left: auto;
+  right: 100%;
+  background: var(--bubble-bg);
+}
+.list-talk1 .history li.ai .info:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: auto;
+  right: 100%;
+  width: 10px;
+  height: 20px;
+  border-radius: 0 20px 0 0;
+  background-color: white;
+}
+.list-talk1 .history li a {
+  @apply text-blue-500;
+}
+.list-talk1 .history li .speaker {
+  @apply cursor-pointer inline-flex items-center p-1 text-sm leading-none px-2 text-black bg-white rounded-full;
+}
+.list-talk1 .history li .icon {
+  transform: rotateY(180deg);
+}
+.list-talk1 .talking .btn-history {
+  @apply bg-transparent p-0 text-black border-0;
+}

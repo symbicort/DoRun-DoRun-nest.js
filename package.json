@@ -1,0 +1,17 @@
+{
+  "name": "dorun-dorun-nest",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "deploy": "npm run build && vercel --prod" 
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "turbo": "^2.1.2"
+  }
+}

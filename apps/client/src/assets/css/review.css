@@ -1,0 +1,57 @@
+@tailwind components;
+
+@layer components {
+  .review {
+    @apply w-full flex;
+  }
+
+  .review-container {
+    @apply flex flex-col w-full px-0;
+  }
+
+  .conversation-controls {
+    @apply w-full flex flex-row-reverse;
+  }
+
+  .review-conversation-lists {
+    @apply w-full;
+  }
+
+  .selectedSort {
+    @apply border-none;
+  }
+
+  .selectedSort:focus {
+    @apply outline-none;
+  }
+
+  .date {
+    @apply py-5 text-lg text-[var(--sub-font-color)];
+  }
+
+  .review-item a {
+    @apply flex py-6 mb-3 shadow rounded-xl;
+  }
+
+  .character-img {
+    @apply w-40 h-40 object-cover border border-[var(--border-divide-color)] overflow-hidden rounded-full shadow;
+  }
+
+  .character-name {
+    @apply text-2xl;
+  }
+
+  .corrected-sentence-count {
+    @apply inline-block w-8 h-8 text-lg text-center text-white rounded-full bg-[var(--highlight-color)];
+  }
+
+  .conversation-time {
+    @apply py-2;
+  }
+
+  .incorrect-first {
+    @apply rounded-full;
+    padding: 0.5rem 1rem;
+    background-color: var(--bg-highlight-color);
+  }
+}

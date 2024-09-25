@@ -1,0 +1,81 @@
+@tailwind components;
+
+@layer components {
+  /* 예문보기 링크 */
+  .preview-container {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .preview {
+    @apply rounded-xl shadow text-center text-2xl border border-[var(--border-divide-color)] cursor-pointer;
+  }
+
+  .preview-sentence-link {
+    @apply block py-32;
+  }
+
+  /* 예문 */
+  .preview-sentence {
+    width: 80%;
+    min-width: 360px;
+    margin: 0 auto;
+    @apply w-full h-full;
+  }
+
+  button.exit-btn {
+    @apply w-10 h-10 p-0 text-center bg-gray-200 rounded-full;
+  }
+
+  button.exit-btn > svg {
+    margin-bottom: 3px;
+  }
+
+  .sentence-sub-title {
+    @apply text-[var(--sub-font-color)] text-sm py-3 pr-2;
+  }
+
+  .key-sentence-english {
+    @apply text-3xl font-bold py-6;
+  }
+
+  .preview-text-btn {
+    @apply mb-3;
+  }
+
+  .preview-text-btn > button {
+    @apply p-1;
+  }
+
+  .example > div {
+    @apply my-6;
+  }
+
+  .english {
+    @apply pb-1 text-lg;
+  }
+
+  .korean {
+    @apply text-[var(--sub-font-color)];
+  }
+
+  .three-sentence-area {
+    @apply w-full px-4 py-4 mt-12 shadow-md border border-[var(--border-divide-color)] rounded-xl;
+  }
+
+  .three-sentence-group {
+    @apply py-2 cursor-pointer;
+  }
+
+  .three-sentence-group .number-btn {
+    @apply inline-block mr-2 text-center;
+  }
+
+  .number-btn {
+    @apply inline-block w-6 h-6 p-0 mr-2 bg-[var(--btn-sub-bg)] text-center text-sm rounded-full hover:bg-[var(--btn-bg-hover)] hover:text-white;
+  }
+
+  .number-btn.active {
+    @apply bg-[var(--btn-bg)] text-white;
+  }
+}

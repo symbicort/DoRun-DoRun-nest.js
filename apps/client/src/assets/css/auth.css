@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .form-container {
+    @apply w-full h-screen flex justify-center items-center sm:bg-[var(--bg-highlight-color)];
+  }
+
+  .form-area {
+    @apply w-full sm:w-[640px] flex flex-col justify-center items-center p-0 sm:py-40 sm:px-32 bg-white rounded-none sm:rounded-3xl;
+  }
+
+  .form-area2 {
+    @apply w-full sm:w-[640px] flex flex-col justify-center items-center p-5 sm:px-20 bg-white rounded-none sm:rounded-3xl;
+  }
+
+  .form-area.signup {
+    @apply py-0;
+  }
+
+  .form-elements {
+    @apply w-full min-w-80 sm:p-0 p-8;
+  }
+
+  .form-title h1 {
+    @apply pl-0 text-3xl text-center;
+  }
+
+  .form-title.signup h1 {
+    @apply pb-1 pt-5;
+  }
+
+  .auth-input {
+    @apply text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 /* dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 */;
+  }
+
+  .auth-checkbox {
+    @apply mr-5 ml-1 mt-2;
+  }
+
+  .auth-label {
+    @apply block mt-5 mb-2 text-sm font-semibold /* dark:text-white */;
+  }
+
+  .auth-span {
+    @apply text-red-500 text-xs;
+  }
+
+  .auth-form .auth-btn {
+    @apply w-full;
+  }
+
+  .signup-link {
+    @apply text-center;
+  }
+
+  input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    appearance: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  input[type="checkbox"]:checked {
+    background: var(--highlight-color, #32e732);
+    border: none;
+  }
+}
