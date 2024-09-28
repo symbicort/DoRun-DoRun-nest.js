@@ -13,5 +13,9 @@
   "description": "",
   "devDependencies": {
     "turbo": "^2.1.2"
-  }
+  },
+  "workspaces": [
+    "apps/*"
+  ],
+  "packageManager": "npm@10.8.2"
 }
