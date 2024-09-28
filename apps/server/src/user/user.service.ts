@@ -2,7 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entity/user.entity';
 import { Repository } from 'typeorm';
-import { CreateUserDto, LoginDto, UserDto } from './dto/user.dto';
+import {
+  RegisterDto,
+  LoginDto,
+  ResDto,
+  LoginResDto,
+  TokenDto,
+  AuthUserDto,
+  GetUserDto,
+  UpdateInfoDto,
+  WithdrawRequestDto,
+  RegisterResDto,
+} from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { TokenProvider } from '../jwt/token.provider';
 import { UserRepository } from './repository/user.repository';
@@ -15,31 +26,31 @@ export class UserService {
     private readonly tokenProvider: TokenProvider,
   ) {}
 
-  async register(createUserDto: CreateUserDto): Promise<UserDto> {
+  async register(registerDto: RegisterDto): Promise<RegisterResDto> {
     const user = new User();
-    const resDto = new UserDto();
+    const registerResDto = new RegisterResDto();
     try {
-      user.userId = createUserDto.userId;
-      const encryptPw = await bcrypt.hash(createUserDto.password, 10);
+      user.userId = registerDto.userId;
+      const encryptPw = await bcrypt.hash(registerDto.password, 10);
       user.password = encryptPw;
-      user.email = createUserDto.email;
+      user.email = registerDto.email;
       const result = await this.userRepository.save(user);
       console.log('회원가입 결과:', result);
-      resDto.result = true;
-      resDto.userId = createUserDto.userId;
-      resDto.email = createUserDto.email;
-      resDto.password = encryptPw;
-      return resDto;
+      registerResDto.result = true;
+      registerResDto.userId = registerDto.userId;
+      registerResDto.email = registerDto.email;
+      registerResDto.password = encryptPw;
+      return registerResDto;
     } catch (e) {
       console.error('회원 가입 진행 중 에러 발생', e);
-      resDto.result = false;
-      return resDto;
+      registerResDto.result = false;
+      return registerResDto;
     }
   }
 
-  async login(loginDto: LoginDto): Promise<UserDto> {
+  async login(loginDto: LoginDto): Promise<LoginResDto> {
     const user = await this.userRepository.findByUserId(loginDto.userId);
-    const result = new UserDto();
+    const result = new LoginResDto();
 
     if (user) {
       if (user.deletedAt) {
@@ -58,18 +69,17 @@ export class UserService {
         return result;
       }
 
-      const userId = user.userId;
-      const tokenDto = this.tokenProvider.generateToken(userId);
+      const tokenDto = this.tokenProvider.generateToken(loginDto.userId);
       console.log('액세스 토큰 확인', tokenDto.accessToken);
 
       await this.userRepository.updateRefreshToken(
-        userId,
+        loginDto.userId,
         tokenDto.refreshToken,
       );
       result.result = true;
       result.msg = '로그인 성공!';
-      result.accessToken = tokenDto.accessToken;
-      result.refreshToken = tokenDto.refreshToken;
+      result.AccessToken = tokenDto.accessToken;
+      result.RefreshToken = tokenDto.refreshToken;
       return result;
     } else {
       result.result = false;
@@ -93,8 +103,11 @@ export class UserService {
     }
   }
 
-  async authuser(accessToken: string, refreshToken: string): Promise<UserDto> {
-    const authuserDto = new UserDto();
+  async authuser(
+    accessToken: string,
+    RefreshToken: string,
+  ): Promise<AuthUserDto> {
+    const authuserDto = new AuthUserDto();
 
     if (accessToken) {
       console.log('액세스 토큰 존재');
@@ -117,9 +130,9 @@ export class UserService {
       }
     }
 
-    if (refreshToken) {
+    if (RefreshToken) {
       const user =
-        await this.userRepository.findNicknameFromToken(refreshToken);
+        await this.userRepository.findNicknameFromToken(RefreshToken);
       if (!user) {
         console.log('리프레시 토큰 유저 없음');
         authuserDto.result = false;
@@ -132,7 +145,7 @@ export class UserService {
       const tokenDto = this.tokenProvider.generateAccessToken(user.userId);
 
       authuserDto.nickname = user.nickname;
-      authuserDto.newToken = tokenDto.accessToken;
+      authuserDto.NewToken = tokenDto.accessToken;
       authuserDto.userId = user.userId;
       authuserDto.result = true;
 
@@ -145,32 +158,32 @@ export class UserService {
     return authuserDto;
   }
 
-  async checkDupId(userId: string): Promise<boolean> {
-    return this.userRepository.existsByUserId(userId);
+  async checkDupId(UserId: string): Promise<boolean> {
+    return this.userRepository.existsByUserId(UserId);
   }
 
-  async checkDupNick(nickname: string): Promise<boolean> {
-    return this.userRepository.existsByNickname(nickname);
+  async checkDupNick(Nickname: string): Promise<boolean> {
+    return this.userRepository.existsByNickname(Nickname);
   }
 
-  async getUserDto(userId: string): Promise<User> {
-    return this.userRepository.findByUserId(userId);
+  async getUserDto(nickname: string): Promise<User> {
+    return this.userRepository.findByUserId(nickname);
   }
 
-  async uploadProfileImg(awsurl: string, userId: string): Promise<boolean> {
-    return this.userRepository.updateProfileImg(awsurl, userId);
+  async uploadProfileImg(awsurl: string, userid: string): Promise<boolean> {
+    return this.userRepository.updateProfileImg(awsurl, userid);
   }
 
   async changePW(
-    userId: string,
+    userid: string,
     inputpw: string,
     email: string,
-  ): Promise<UserDto> {
-    const resDto = new UserDto();
+  ): Promise<ResDto> {
+    const resDto = new ResDto();
     try {
-      const user = await this.userRepository.findByUserId(userId);
+      const user = await this.userRepository.findByUserId(userid);
 
-      if (user.email !== email) {
+      if (!user || user.email !== email) {
         resDto.result = false;
         resDto.msg = '이메일 정보가 등록된 정보와 일치하지 않습니다.';
         return resDto;
@@ -178,7 +191,7 @@ export class UserService {
 
       const encryptPw = await bcrypt.hash(inputpw, 10);
 
-      await this.userRepository.updatePassword(userId, encryptPw);
+      await this.userRepository.updatePassword(userid, encryptPw);
 
       resDto.result = true;
       resDto.msg = '비밀번호 변경이 완료되었습니다.';
@@ -192,13 +205,19 @@ export class UserService {
   }
 
   async changeEmail(
-    userId: string,
+    userid: string,
     inputpw: string,
     email: string,
-  ): Promise<UserDto> {
-    const resDto = new UserDto();
+  ): Promise<ResDto> {
+    const resDto = new ResDto();
     try {
-      const user = await this.userRepository.findByUserId(userId);
+      const user = await this.userRepository.findByUserId(userid);
+
+      if (!user) {
+        resDto.result = false;
+        resDto.msg = '사용자를 찾을 수 없습니다.';
+        return resDto;
+      }
 
       const comparePW = await bcrypt.compare(inputpw, user.password);
 
@@ -208,13 +227,12 @@ export class UserService {
         return resDto;
       }
 
-      await this.userRepository.updateEmail(userId, email);
+      await this.userRepository.updateEmail(userid, email);
 
       resDto.result = true;
       resDto.msg = '이메일 변경이 완료되었습니다.';
       return resDto;
     } catch (e) {
-      // 예외 발생 시 처리
       resDto.result = false;
       resDto.msg = '이메일 정보 변경 중 에러가 발생하였습니다.';
       console.error(e);
@@ -222,8 +240,8 @@ export class UserService {
     }
   }
 
-  async withdraw(userId: string): Promise<UserDto> {
-    const resDto = new UserDto();
+  async withdraw(userId: string): Promise<ResDto> {
+    const resDto = new ResDto();
 
     try {
       console.log('회원탈퇴 유저 ID', userId);
