@@ -1,6 +1,6 @@
 import { IsString, IsBoolean } from 'class-validator';
 
-export class userMissionDto {
+export class MissionDto {
   @IsString()
   missionId: string;
 

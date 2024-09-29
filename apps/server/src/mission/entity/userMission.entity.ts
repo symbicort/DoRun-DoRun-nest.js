@@ -5,7 +5,7 @@ import {
   JoinColumn,
   Column,
 } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '../../user/entity/user.entity';
 import { MissionEntity } from './mission.entity';
 
 @Entity('user_mission')

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { MissionController } from './mission.controller';
-import { MissionService } from './mission.service';
+import { MissionController } from './controller/mission.controller';
+import { MissionService } from './service/mission.service';
 
 @Module({
   controllers: [MissionController],

@@ -1,85 +1,88 @@
-import { EntityRepository, Repository } from 'typeorm';
-import { User } from '../entity/user.entity';
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from '../entity/user.entity';
 
 @Injectable()
-export class UserRepository extends Repository<User> {
-  async existsByUserId(userId: string): Promise<boolean> {
-    const count = await this.count({ where: { userId } });
-    return count > 0;
-  }
+export class UserRepository {
+    constructor(
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
+    ) {}
 
-  async existsByNickname(nickname: string): Promise<boolean> {
-    const count = await this.count({ where: { nickname } });
-    return count > 0;
-  }
+    async existsByUserId(userId: string): Promise<boolean> {
+        const count = await this.userRepository.count({ where: { userId } });
+        return count > 0;
+    }
 
-  async findByNickname(nickname: string): Promise<User | undefined> {
-    return this.findOne({ where: { nickname } });
-  }
+    async existsByNickname(nickname: string): Promise<boolean> {
+        const count = await this.userRepository.count({ where: { nickname } });
+        return count > 0;
+    }
 
-  async findByUserId(userId: string): Promise<User | undefined> {
-    return this.findOne({ where: { userId } });
-  }
+    async findByNickname(nickname: string): Promise<User | undefined> {
+        return this.userRepository.findOne({ where: { nickname } });
+    }
 
-  async updateRefreshToken(
-    userId: string,
-    refreshToken: string,
-  ): Promise<void> {
-    await this.createQueryBuilder()
-      .update(User)
-      .set({ refreshKey: refreshToken })
-      .where('userId = :userId', { userId })
-      .execute();
-  }
+    async findByUserId(userId: string): Promise<User | undefined> {
+        return this.userRepository.findOne({ where: { userId } });
+    }
 
-  async updateProfileImg(userId: string, awsurl: string): Promise<boolean> {
-    const result = await this.createQueryBuilder()
-      .update(User)
-      .set({ profileImg: awsurl })
-      .where('userId = :userId', { userId })
-      .execute();
-    return result.affected > 0;
-  }
+    async updateRefreshToken(userId: string, refreshToken: string): Promise<void> {
+        await this.userRepository.createQueryBuilder()
+            .update(User)
+            .set({ refreshKey: refreshToken })
+            .where('userId = :userId', { userId })
+            .execute();
+    }
 
-  async refreshTokenToNull(userId: string): Promise<void> {
-    await this.createQueryBuilder()
-      .update(User)
-      .set({ refreshKey: null })
-      .where('userId = :userId', { userId })
-      .execute();
-  }
+    async updateProfileImg(userId: string, awsurl: string): Promise<boolean> {
+        const result = await this.userRepository.createQueryBuilder()
+            .update(User)
+            .set({ profileImg: awsurl })
+            .where('userId = :userId', { userId })
+            .execute();
+        return result.affected > 0;
+    }
 
-  async findNicknameFromToken(refreshToken: string): Promise<User | undefined> {
-    return this.findOne({ where: { refreshKey: refreshToken } });
-  }
+    async refreshTokenToNull(userId: string): Promise<void> {
+        await this.userRepository.createQueryBuilder()
+            .update(User)
+            .set({ refreshKey: null })
+            .where('userId = :userId', { userId })
+            .execute();
+    }
 
-  async updatePassword(userId: string, encryptPw: string): Promise<void> {
-    await this.createQueryBuilder()
-      .update(User)
-      .set({ password: encryptPw })
-      .where('userId = :userId', { userId })
-      .execute();
-  }
+    async findNicknameFromToken(refreshToken: string): Promise<User | undefined> {
+        return this.userRepository.findOne({ where: { refreshKey: refreshToken } });
+    }
 
-  async updateEmail(userId: string, email: string): Promise<void> {
-    await this.createQueryBuilder()
-      .update(User)
-      .set({ email })
-      .where('userId = :userId', { userId })
-      .execute();
-  }
+    async updatePassword(userId: string, encryptPw: string): Promise<void> {
+        await this.userRepository.createQueryBuilder()
+            .update(User)
+            .set({ password: encryptPw })
+            .where('userId = :userId', { userId })
+            .execute();
+    }
 
-  async selectUserId(userId: string): Promise<boolean> {
-    const count = await this.count({ where: { userId, deletedAt: null } });
-    return count > 0;
-  }
+    async updateEmail(userId: string, email: string): Promise<void> {
+        await this.userRepository.createQueryBuilder()
+            .update(User)
+            .set({ email })
+            .where('userId = :userId', { userId })
+            .execute();
+    }
 
-  async softDeleteUserById(userId: string): Promise<void> {
-    await this.createQueryBuilder()
-      .update(User)
-      .set({ deletedAt: new Date() })
-      .where('userId = :userId', { userId })
-      .execute();
-  }
+    async selectUserId(userId: string): Promise<boolean> {
+        const count = await this.userRepository.count({ where: { userId, deletedAt: null } });
+        return count > 0;
+    }
+
+    async softDeleteUserById(userId: string): Promise<void> {
+        await this.userRepository.createQueryBuilder()
+            .update(User)
+            .set({ deletedAt: new Date() })
+            .where('userId = :userId', { userId })
+            .execute();
+    }
 }
