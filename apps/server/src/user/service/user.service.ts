@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entity/user.entity';
+import { User } from '../entity/user.entity';
 import {
   RegisterDto,
   LoginDto,
@@ -12,10 +12,10 @@ import {
   UpdateInfoDto,
   WithdrawRequestDto,
   RegisterResDto,
-} from './dto/user.dto';
+} from '../dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { TokenProvider } from '../jwt/token.provider';
-import { UserRepository } from './repository/user.repository';
+import { UserRepository } from '../repository/user.repository';
 
 @Injectable()
 export class UserService {

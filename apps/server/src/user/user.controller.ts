@@ -12,9 +12,9 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { UserService } from './user.service';
+import { UserService } from './service/user.service';
 import { Response, Request } from 'express';
-import { TokenProvider } from '../jwt/token.provider';
+import { TokenProvider } from './service/token.provider';
 import { S3Service } from '../s3/s3.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ChatService } from '../chat/chat.service';

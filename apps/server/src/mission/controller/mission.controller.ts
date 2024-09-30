@@ -1,6 +1,6 @@
 import { Controller, Post, Get, Body, Query, Cookie, HttpCode, HttpStatus, HttpException, Res } from '@nestjs/common';
 import { MissionService } from '../service/mission.service';
-import { UserMissionDto } from '../dto/user-mission.dto';
+import { MissionDto } from '../dto/mission.dto';
 import { Request, Response } from 'express';
 import { PracticeService } from '../service/practice.service';
 
@@ -26,7 +26,7 @@ export class MissionController {
         @Query('course') course: string,
         @Cookie('accessToken') accessToken?: string,
         @Cookie('RefreshToken') refreshToken?: string,
-    ): Promise<UserMissionDto[]> {
+    ): Promise<MissionDto[]> {
         return this.missionService.getUnLearnMissionsForUser(course, accessToken, refreshToken);
     }
 
@@ -44,7 +44,7 @@ export class MissionController {
     async getUncompletedMissionsForUser(
         @Cookie('accessToken') accessToken?: string,
         @Cookie('RefreshToken') refreshToken?: string,
-    ): Promise<UserMissionDto[]> {
+    ): Promise<MissionDto[]> {
         return this.missionService.getUncompletedMissionsForUser(accessToken, refreshToken);
     }
 
