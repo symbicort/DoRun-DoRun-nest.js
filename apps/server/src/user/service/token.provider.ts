@@ -12,7 +12,10 @@ export class TokenProvider {
 
   // 로그인 시 토큰 생성
   generateToken(userId: string): TokenDto {
-    const accessToken = this.jwtService.sign({ sub: userId }, { expiresIn: '30m' });
+    const accessToken = this.jwtService.sign(
+      { sub: userId },
+      { expiresIn: '30m' },
+    );
     const refreshToken = this.jwtService.sign({}, { expiresIn: '7d' });
 
     return {
@@ -50,7 +53,10 @@ export class TokenProvider {
 
   // 액세스 토큰 생성
   generateAccessToken(userId: string): TokenDto {
-    const accessToken = this.jwtService.sign({ sub: userId }, { expiresIn: '30m' });
+    const accessToken = this.jwtService.sign(
+      { sub: userId },
+      { expiresIn: '30m' },
+    );
 
     return {
       accessToken,

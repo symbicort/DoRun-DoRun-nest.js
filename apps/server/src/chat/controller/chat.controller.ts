@@ -1,10 +1,23 @@
-import { Controller, Post, Body, Get, Res, Req, Cookie } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Res,
+  Req,
+  Cookie,
+  UseInterceptors,
+  UploadedFile,
+  BadRequestException,
+} from '@nestjs/common';
 import { Response, Request } from 'express';
 import { ChatService } from './chat.service';
 import { UserService } from './user.service';
 import { TTSService } from './tts.service';
 import { ChatDto } from './dto/chat.dto';
 import { UserDto } from './dto/user.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { STTService } from '../service/STT.service';
 
 @Controller('chat')
 export class ChatController {
@@ -12,6 +25,7 @@ export class ChatController {
     private readonly chatService: ChatService,
     private readonly userService: UserService,
     private readonly ttsService: TTSService,
+    private readonly sttService: STTService,
   ) {}
 
   @Post('getCorrection')
@@ -45,7 +59,7 @@ export class ChatController {
 
       sendChatDto.aimsg = getAnswerDto.aiMsg;
       sendChatDto.result = true;
-      sendChatDto.userMsg = chatDto.messages.join(', '); // 배열을 문자열로 변환
+      sendChatDto.userMsg = chatDto.messages.join(', ');
       sendChatDto.emotion = getAnswerDto.emotion;
 
       if (!authUser.result) {
@@ -56,6 +70,20 @@ export class ChatController {
       }
     } catch (error) {
       throw new Error(error.message);
+    }
+  }
+
+  @Post('speech')
+  @UseInterceptors(FileInterceptor('audio'))
+  async stt(@UploadedFile() audioFile: Express.Multer.File): Promise<string> {
+    if (!audioFile) {
+      throw new BadRequestException('No audio file provided');
+    }
+
+    try {
+      return await this.sttService.speechToText(audioFile);
+    } catch (error) {
+      throw new BadRequestException(`STT failed: ${error.message}`);
     }
   }
 }
