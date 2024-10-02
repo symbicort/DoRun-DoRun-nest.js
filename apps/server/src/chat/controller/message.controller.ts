@@ -1,7 +1,7 @@
 import { Controller, Get, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { MessageService } from './message.service';
-import { MessageDto } from '../chat-message.dto';
+import { MessageService } from '../service/chat-message.service';
+import { MessageDto } from '../dto/chat-message.dto';
 
 @Controller('message')
 export class MessageController {

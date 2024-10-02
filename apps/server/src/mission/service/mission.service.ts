@@ -1,13 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../user/entity/user.entity';
-import { MissionEntity } from './entity/mission.entity';
-import { UserMissionEntity } from './entity/user-mission.entity';
-import { MissionRepository } from './repository/mission.repository';
-import { UserMissionRepository } from './repository/userMission.repository';
-import { UserRepository } from '../user/repository/user.repository';
-import { UserService } from '../user/user.service';
-import { AuthUserDto, ResDto, UserMissionDto } from '../user/dto/user.dto';
 import { PredictionServiceClient } from '@google-cloud/aiplatform';
 import { Value } from '@google-cloud/aiplatform/build/src/schema/predict';
 import * as fs from 'fs';
@@ -98,9 +90,7 @@ export class MissionService {
     }
 
     // 랜덤 3 개
-    const shuffledMissions = unLearnMissions.sort(
-      () => 0.5 - Math.random(),
-    );
+    const shuffledMissions = unLearnMissions.sort(() => 0.5 - Math.random());
     const limitedUnlearnMissions = shuffledMissions.slice(0, 3);
 
     const result: UserMissionDto[] = [];
@@ -185,9 +175,7 @@ export class MissionService {
     }
 
     // 랜덤 3 개
-    const shuffledMissions = unusedMissions.sort(
-      () => 0.5 - Math.random(),
-    );
+    const shuffledMissions = unusedMissions.sort(() => 0.5 - Math.random());
     const limitedUnusedMissions = shuffledMissions.slice(0, 3);
 
     const result: UserMissionDto[] = [];
@@ -220,7 +208,7 @@ export class MissionService {
     const project = 'stately-fabric-435204-t1'; // Google Cloud Console 에서 본인 프로젝트 이름 확인
     const location = 'asia-northeast3';
     const publisher = 'google';
-    const model = 'text-bison@002'; 
+    const model = 'text-bison@002';
 
     // 인증 파일의 경로
     const credentialsPath =
@@ -262,9 +250,7 @@ export class MissionService {
     model: string,
     credentialsPath: string,
   ): Promise<string> {
-    const credentials = JSON.parse(
-      fs.readFileSync(credentialsPath, 'utf-8'),
-    );
+    const credentials = JSON.parse(fs.readFileSync(credentialsPath, 'utf-8'));
     const predictionServiceClient = new PredictionServiceClient({
       apiEndpoint: `${location}-aiplatform.googleapis.com`,
       credentials,

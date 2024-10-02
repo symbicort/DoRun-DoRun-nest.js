@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { SpeechClient } from '@google-cloud/speech';
-import { Multer } from 'multer';
+import { protos } from '@google-cloud/speech';
 
 @Injectable()
 export class STTService {
@@ -15,9 +15,11 @@ export class STTService {
   async speechToText(file: Express.Multer.File): Promise<string> {
     const audioBytes = file.buffer.toString('base64');
 
-    const request = {
+    const request: protos.google.cloud.speech.v1.IRecognizeRequest = {
       config: {
-        encoding: 'WEBM_OPUS',
+        encoding:
+          protos.google.cloud.speech.v1.RecognitionConfig.AudioEncoding
+            .WEBM_OPUS,
         sampleRateHertz: 48000,
         languageCode: 'en-US',
         enableAutomaticPunctuation: true,

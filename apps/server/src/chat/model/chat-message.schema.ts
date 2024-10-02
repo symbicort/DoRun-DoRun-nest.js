@@ -1,10 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, ObjectId } from 'mongoose';
 
 export type MessageDocument = HydratedDocument<Message>;
 
 @Schema({ collection: 'messages', timestamps: true })
 export class Message {
+  @Prop()
+  _id: ObjectId;
+
   @Prop({ required: true })
   roomid: string;
 

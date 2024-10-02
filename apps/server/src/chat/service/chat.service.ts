@@ -1,31 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { ChatDto } from './chat.dto';
-import { WebClient } from '@google-cloud/vertexai';
-import { GoogleAuth } from 'google-auth-library';
-import axios from 'axios';
+import { VertexAI, GenerativeModelPreview } from '@google-cloud/vertexai';
+import { ChatDto } from '../dto/chat.dto';
+import { CorrectContext } from 'src/constants/correct-context';
+import { Pooh } from 'src/constants/pooh-context';
 
 @Injectable()
 export class ChatService {
-  private readonly chatAuthClientUrl: string;
-  private readonly textAuthClientUrl: string;
+  private readonly model: string;
+  private readonly vertex_ai: VertexAI;
+  private readonly chatModel: GenerativeModelPreview;
+  private readonly textModel: GenerativeModelPreview;
 
   constructor() {
-    this.chatAuthClientUrl =
-      'https://asia-northeast3-aiplatform.googleapis.com/v1/projects/stately-fabric-435204-t1/locations/asia-northeast3/publishers/google/models/chat-bison:predict';
-    this.textAuthClientUrl =
-      'https://asia-northeast3-aiplatform.googleapis.com/v1/projects/stately-fabric-435204-t1/locations/asia-northeast3/publishers/google/models/text-bison-32k:predict';
-  }
+    this.model = 'gemini-1.5-pro-001';
 
-  // Method to get authentication token
-  private async getAuthToken(): Promise<string> {
-    const auth = new GoogleAuth({
-      keyFile:
-        '/home/ubuntu/.config/gcloud/application_default_credentials.json', // Update path for server
-      scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+    // VertexAI 인스턴스 생성
+    this.vertex_ai = new VertexAI({
+      project: 'stately-fabric-435204-t1',
+      location: 'asia-northeast3',
     });
-    const client = await auth.getClient();
-    const token = await client.getAccessToken();
-    return token;
+
+    // 채팅 모델 인스턴스 생성
+    this.chatModel = this.vertex_ai.preview.getGenerativeModel({
+      model: this.model,
+      generationConfig: {
+        maxOutputTokens: 200,
+        temperature: 0.3,
+        topP: 0.8,
+        topK: 40,
+      },
+    });
+
+    // 텍스트 수정 모델 인스턴스 생성
+    this.textModel = this.vertex_ai.preview.getGenerativeModel({
+      model: this.model,
+      generationConfig: {
+        maxOutputTokens: 8192,
+        temperature: 0.5,
+        topP: 1,
+      },
+    });
   }
 
   // API to get the character's response
@@ -33,27 +47,12 @@ export class ChatService {
     const messages = chatDto.messages;
     const msgQuery = this.makeMessagesQuery(messages);
 
-    const requestBody = {
-      instances: [
-        {
-          context: chatDto.context,
-          messages: [msgQuery],
-        },
-      ],
-      parameters: {
-        temperature: 0.3,
-        maxOutputTokens: 200,
-        topP: 0.8,
-        topK: 40,
-      },
+    const request_message = {
+      context: Pooh,
+      messages: [msgQuery],
     };
 
-    const authToken = await this.getAuthToken();
-    const response = await this.sendRequest(
-      this.chatAuthClientUrl,
-      requestBody,
-      authToken,
-    );
+    const response = await this.sendChatRequest(request_message);
     const content = this.extractContentOnly(response, 'chat');
 
     const [aiMsg, emotion] = content.split(',, ');
@@ -68,57 +67,41 @@ export class ChatService {
     const messages = chatDto.messages;
     const stringifiedMessages = this.stringifyMessage(messages);
 
-    const requestBody = {
-      instances: [
-        {
-          content: chatDto.context + stringifiedMessages,
-        },
-      ],
-      parameters: {
-        maxOutputTokens: 8192,
-        temperature: 0.5,
-        topP: 1,
-      },
+    const request_message = {
+      content: CorrectContext + stringifiedMessages,
     };
 
-    const authToken = await this.getAuthToken();
-    const response = await this.sendRequest(
-      this.textAuthClientUrl,
-      requestBody,
-      authToken,
-    );
+    const response = await this.sendTextRequest(request_message);
     const content = this.extractContentOnly(response, 'text');
 
     return content.split('\n');
   }
 
-  // Method to send request to the API
-  private async sendRequest(
-    url: string,
-    requestBody: any,
-    authToken: string,
-  ): Promise<any> {
-    try {
-      const response = await axios.post(url, requestBody, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error sending request:', error);
-      throw new Error('API request failed');
-    }
+  // Method to send chat request to the API
+  private async sendChatRequest(request_message: any): Promise<any> {
+    const chat = this.chatModel.startChat({});
+    const streamResult = await chat.sendMessageStream(
+      JSON.stringify(request_message),
+    );
+    return streamResult.response;
+  }
+
+  // Method to send text correction request to the API
+  private async sendTextRequest(request_message: any): Promise<any> {
+    const chat = this.textModel.startChat({});
+    const streamResult = await chat.sendMessageStream(
+      JSON.stringify(request_message),
+    );
+    return streamResult.response;
   }
 
   // Extract the content from the API response
   private extractContentOnly(response: any, responseForm: string): string {
-    const predictions = response.predictions[0];
+    const predictions = response.candidates[0];
     if (responseForm === 'chat') {
-      return predictions.candidates[0].content;
+      return predictions.content; // 채팅 응답 추출
     } else {
-      return predictions.content;
+      return predictions.content; // 텍스트 수정 응답 추출
     }
   }
 

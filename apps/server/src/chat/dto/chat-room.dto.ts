@@ -17,7 +17,7 @@ export class RoomDto {
 
   @IsArray()
   @IsString({ each: true })
-  messages: string[];
+  messages?: string[];
 
   @Transform(({ value }) =>
     value ? format(new Date(value), 'yyyy-MM-dd HH:mm:ss') : null,

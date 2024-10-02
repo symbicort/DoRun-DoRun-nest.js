@@ -5,8 +5,8 @@ import { writeFile } from 'fs/promises';
 @Injectable()
 export class TTSService {
   private readonly xiApiKey: string = process.env.TTS_API_KEY; // 환경 변수에서 API 키를 가져옵니다.
-  private static readonly SERVER_PATH =
-    '/home/ubuntu/DoRun-DoRun/frontend/dist/pooh.wav'; // 고정 경로
+  private readonly SERVER_PATH =
+    '/home/ubuntu/DoRun-DoRun-nest.js/frontend/dist/pooh.wav'; // 고정 경로
 
   private elevenLabs: ElevenLabs;
 
@@ -30,7 +30,7 @@ export class TTSService {
         voice_settings: voiceSettings,
       });
 
-      await writeFile(TTSService.SERVER_PATH, audioStream, {
+      await writeFile(this.SERVER_PATH, audioStream, {
         encoding: 'binary',
       });
       console.log('Audio stream saved successfully.');

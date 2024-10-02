@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Room, RoomDocument } from './room.schema'; // Room 스키마 경로
-import { RoomDto } from './room.dto'; // RoomDto 경로
+import { Room, RoomDocument } from '../model/chat-room.schema';
+import { RoomDto } from '../dto/chat-room.dto';
 
 @Injectable()
 export class RoomService {
@@ -13,7 +13,7 @@ export class RoomService {
   async findAllByUserid(userid: string): Promise<RoomDto[]> {
     const rooms = await this.roomModel.find({ userid }).exec();
     return rooms.map((room) => ({
-      id: room._id.toString(), // Mongoose의 _id를 문자열로 변환
+      id: room._id.toString(),
       userid: room.userid,
       ai: room.ai,
       createdAt: room.createdAt,

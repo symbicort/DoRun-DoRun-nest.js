@@ -2,22 +2,18 @@ import {
   Controller,
   Post,
   Body,
-  Get,
-  Res,
-  Req,
-  Cookie,
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  Request,
 } from '@nestjs/common';
-import { Response, Request } from 'express';
-import { ChatService } from './chat.service';
-import { UserService } from './user.service';
-import { TTSService } from './tts.service';
-import { ChatDto } from './dto/chat.dto';
-import { UserDto } from './dto/user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { STTService } from '../service/STT.service';
+import { ChatService } from '../service/chat.service';
+import { UserService } from 'src/user/service/user.service';
+import { TTSService } from '../service/TTS.service';
+import { ChatDto } from '../dto/chat.dto';
+import { SendChatDto } from 'src/user/dto/user.dto';
 
 @Controller('chat')
 export class ChatController {
@@ -35,13 +31,15 @@ export class ChatController {
 
   @Post('sendChat')
   async sendChat(
-    @Cookie('accessToken') accessToken: string,
-    @Cookie('RefreshToken') refreshToken: string,
+    @Request() req,
     @Body() chatDto: ChatDto,
-  ): Promise<UserDto.SendChatDto> {
-    const sendChatDto = UserDto.SendChatDto();
+  ): Promise<SendChatDto> {
+    const sendChatDto = new SendChatDto();
 
     try {
+      const accessToken = req.cookies['accessToken'];
+      const refreshToken = req.cookies['RefreshToken'];
+
       console.log('sendChat 토큰 확인', accessToken, refreshToken);
 
       const authUser = await this.userService.authuser(
@@ -49,7 +47,7 @@ export class ChatController {
         refreshToken,
       );
 
-      chatDto.messages = chatDto.messages; // 메시지 설정
+      chatDto.messages = chatDto.messages;
 
       const getAnswerDto = await this.chatService.getAnswer(chatDto);
 
@@ -57,7 +55,7 @@ export class ChatController {
 
       await this.ttsService.callExternalApi(getAnswerDto.aiMsg);
 
-      sendChatDto.aimsg = getAnswerDto.aiMsg;
+      sendChatDto.Aimsg = getAnswerDto.aiMsg;
       sendChatDto.result = true;
       sendChatDto.userMsg = chatDto.messages.join(', ');
       sendChatDto.emotion = getAnswerDto.emotion;

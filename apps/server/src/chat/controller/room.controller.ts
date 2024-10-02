@@ -1,19 +1,11 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Query,
-  Res,
-  Cookies,
-} from '@nestjs/common';
-import { Response } from 'express';
-import { RoomService } from './room.service';
-import { UserService } from './user.service';
-import { MessageService } from './message.service';
-import { Room } from './entities/room.entity';
-import { RoomDto } from './dto/room.dto';
-import { UserDto } from './dto/user.dto';
+import { Controller, Get, Post, Body, Res, Req } from '@nestjs/common';
+import { Response, Request } from 'express';
+import { UserService } from 'src/user/service/user.service';
+import { RoomService } from '../service/chat-room.service';
+import { MessageService } from '../service/chat-message.service';
+import { RoomDto } from '../dto/chat-room.dto';
+import { AuthUserDto } from 'src/user/dto/user.dto';
+import { Room } from '../model/chat-room.schema';
 
 @Controller('room')
 export class RoomController {
@@ -24,13 +16,12 @@ export class RoomController {
   ) {}
 
   @Get('getRooms')
-  async getRooms(
-    @Cookies('accessToken') accessToken: string,
-    @Cookies('RefreshToken') refreshToken: string,
-    @Res() res: Response,
-  ): Promise<Response> {
+  async getRooms(@Req() req: Request, @Res() res: Response): Promise<Response> {
     try {
-      const authUser: UserDto.AuthuserDto = await this.userService.authuser(
+      const accessToken = req.cookies['accessToken'];
+      const refreshToken = req.cookies['RefreshToken'];
+
+      const authUser: AuthUserDto = await this.userService.authuser(
         accessToken,
         refreshToken,
       );
@@ -49,19 +40,21 @@ export class RoomController {
   @Post('newRoom')
   async newRoom(
     @Body() room: Room,
-    @Cookies('accessToken') accessToken: string,
-    @Cookies('RefreshToken') refreshToken: string,
+    @Req() req: Request,
     @Res() res: Response,
   ): Promise<Response> {
     try {
-      const authUser: UserDto.AuthuserDto = await this.userService.authuser(
+      const accessToken = req.cookies['accessToken'];
+      const refreshToken = req.cookies['RefreshToken'];
+
+      const authUser: AuthUserDto = await this.userService.authuser(
         accessToken,
         refreshToken,
       );
-      room.userId = authUser.userId; // Assuming Room entity has a userId property
+      room.userid = authUser.userId;
       const newRoom: Room = await this.roomService.newRoom(room);
       await this.messageService.addMessagesByRoomId(room, room.messages);
-      return res.json({ id: newRoom.id });
+      return res.json({ id: newRoom._id });
     } catch (error) {
       console.error(error);
       return res
