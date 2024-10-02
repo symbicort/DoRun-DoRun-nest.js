@@ -31,6 +31,16 @@ export class MissionRepository {
     });
   }
 
+  async saveUserMission(
+    userMission: UserMissionEntity,
+  ): Promise<UserMissionEntity> {
+    return this.userMissionRepository.save(userMission);
+  }
+
+  async saveMission(mission: MissionEntity): Promise<MissionEntity> {
+    return this.missionRepository.save(mission);
+  }
+
   async findByUserIdAndMissionId_Course(
     user: User,
     course: string,
@@ -79,11 +89,11 @@ export class MissionRepository {
     user: User,
     mission: MissionEntity,
     learn: boolean,
-  ): Promise<UserMissionEntity | undefined> {
+  ): Promise<UserMissionEntity> {
     return this.userMissionRepository.findOne({
       where: {
-        userId: user.userId,
-        missionId: mission.missionId,
+        userId: user,
+        missionId: mission,
         learn: learn,
       },
     });
@@ -95,7 +105,7 @@ export class MissionRepository {
   ): Promise<UserMissionEntity[]> {
     return this.userMissionRepository.find({
       where: {
-        userId: user.userId,
+        userId: user,
         missionId: {
           id: In(missions),
         },

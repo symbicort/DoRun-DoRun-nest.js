@@ -3,16 +3,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PredictionServiceClient } from '@google-cloud/aiplatform';
 import { Value } from '@google-cloud/aiplatform/build/src/schema/predict';
 import * as fs from 'fs';
+import { User } from 'src/user/entity/user.entity';
+import { UserRepository } from 'src/user/repository/user.repository';
+import { MissionEntity } from '../entity/mission.entity';
+import { MissionRepository } from '../repository/mission.repository';
+import { UserMissionEntity } from '../entity/userMission.entity';
+import { UserService } from 'src/user/service/user.service';
+import { AuthUserDto } from 'src/user/dto/user.dto';
+import { MissionDto } from '../dto/mission.dto';
 
 @Injectable()
 export class MissionService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: UserRepository,
-    @InjectRepository(MissionEntity)
     private readonly missionRepository: MissionRepository,
-    @InjectRepository(UserMissionEntity)
-    private readonly userMissionRepository: UserMissionRepository,
     private readonly userService: UserService,
   ) {}
 
@@ -37,7 +42,7 @@ export class MissionService {
 
     // 이미 존재하는 미션인지 확인
     const existingMissions =
-      await this.userMissionRepository.findByUserIdAndMissionId_Course(
+      await this.missionRepository.findByUserIdAndMissionId_Course(
         user,
         course,
       );
@@ -56,7 +61,7 @@ export class MissionService {
         .learn(false)
         .build();
 
-      await this.userMissionRepository.save(userMission);
+      await this.missionRepository.saveUserMission(userMission);
     }
   }
 
@@ -65,7 +70,7 @@ export class MissionService {
     course: string,
     accessToken: string,
     refreshToken: string,
-  ): Promise<UserMissionDto[]> {
+  ): Promise<MissionDto[]> {
     const authuserDto: AuthUserDto = await this.userService.authuser(
       accessToken,
       refreshToken,
@@ -79,7 +84,7 @@ export class MissionService {
 
     // 학습 false 미션 가져오기
     const unLearnMissions =
-      await this.userMissionRepository.findByUserIdAndLearnAndMissionId_Course(
+      await this.missionRepository.findByUserIdAndLearnAndMissionId_Course(
         user,
         false,
         course,
@@ -93,10 +98,10 @@ export class MissionService {
     const shuffledMissions = unLearnMissions.sort(() => 0.5 - Math.random());
     const limitedUnlearnMissions = shuffledMissions.slice(0, 3);
 
-    const result: UserMissionDto[] = [];
+    const result: MissionDto[] = [];
 
     for (const limitedUnlearnMission of limitedUnlearnMissions) {
-      const userMissionDto: UserMissionDto = UserMissionDto.builder()
+      const userMissionDto: MissionDto = MissionDto.builder()
         .missionId(limitedUnlearnMission.missionId.missionId)
         .mission(limitedUnlearnMission.missionId.mission)
         .meaning(limitedUnlearnMission.missionId.meaning)
@@ -131,7 +136,7 @@ export class MissionService {
 
     // 해당 미션 데이터 찾기
     const userMission =
-      await this.userMissionRepository.findByUserIdAndMissionIdAndLearn(
+      await this.missionRepository.findByUserIdAndMissionIdAndLearn(
         user,
         mission,
         false,
@@ -142,14 +147,14 @@ export class MissionService {
       return;
     }
     userMission.learn = true;
-    await this.userMissionRepository.save(userMission);
+    await this.missionRepository.saveMission(userMission);
   }
 
   // 채팅창 : 프론트로 문장 전송
   async getUncompletedMissionsForUser(
     accessToken: string,
     refreshToken: string,
-  ): Promise<UserMissionDto[]> {
+  ): Promise<MissionDto[]> {
     const authuserDto: AuthUserDto = await this.userService.authuser(
       accessToken,
       refreshToken,
@@ -164,7 +169,7 @@ export class MissionService {
 
     // 학습 true, 사용 false 미션 가져오기
     const unusedMissions =
-      await this.userMissionRepository.findByUserIdAndCompleteAndLearn(
+      await this.missionRepository.findByUserIdAndCompleteAndLearn(
         user,
         false,
         true,
@@ -178,10 +183,10 @@ export class MissionService {
     const shuffledMissions = unusedMissions.sort(() => 0.5 - Math.random());
     const limitedUnusedMissions = shuffledMissions.slice(0, 3);
 
-    const result: UserMissionDto[] = [];
+    const result: MissionDto[] = [];
 
     for (const limitedUnusedMission of limitedUnusedMissions) {
-      const userMissionDto: UserMissionDto = UserMissionDto.builder()
+      const userMissionDto: MissionDto = UserMissionDto.builder()
         .missionId(limitedUnusedMission.missionId.missionId)
         .mission(limitedUnusedMission.missionId.mission)
         .meaning(limitedUnusedMission.missionId.meaning)
@@ -302,14 +307,14 @@ export class MissionService {
     if (user) {
       // 사용자와 미션 ID 목록을 기반으로 데이터 찾기
       const userMissions =
-        await this.userMissionRepository.findByUserIdAndMissionId_MissionIdIn(
+        await this.missionRepository.findByUserIdAndMissionId_MissionIdIn(
           user,
           missionIds,
         );
       for (const userMission of userMissions) {
         userMission.complete = true;
       }
-      await this.userMissionRepository.save(userMissions);
+      await this.missionRepository.saveMission(userMissions);
     }
   }
 
@@ -319,6 +324,6 @@ export class MissionService {
     for (const userMission of userMissions) {
       userMission.complete = true;
     }
-    await this.userMissionRepository.save(userMissions);
+    await this.missionRepository.save(userMissions);
   }
 }
