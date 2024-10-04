@@ -14,7 +14,7 @@ import {
   RegisterResDto,
 } from '../dto/user.dto';
 import * as bcrypt from 'bcrypt';
-import { TokenProvider } from '../jwt/token.provider';
+import { TokenProvider } from './token.provider';
 import { UserRepository } from '../repository/user.repository';
 
 @Injectable()
@@ -26,24 +26,16 @@ export class UserService {
   ) {}
 
   async register(registerDto: RegisterDto): Promise<RegisterResDto> {
-    const user = new User();
-    const registerResDto = new RegisterResDto();
     try {
-      user.userId = registerDto.userId;
       const encryptPw = await bcrypt.hash(registerDto.password, 10);
-      user.password = encryptPw;
-      user.email = registerDto.email;
-      const result = await this.userRepository.save(user);
-      console.log('회원가입 결과:', result);
-      registerResDto.result = true;
-      registerResDto.userId = registerDto.userId;
-      registerResDto.email = registerDto.email;
-      registerResDto.password = encryptPw;
-      return registerResDto;
+
+      registerDto.password = encryptPw;
+
+      const data = await this.userRepository.save(registerDto);
+
+      return { result: true, userId: data.userId, email: data.email };
     } catch (e) {
-      console.error('회원 가입 진행 중 에러 발생', e);
-      registerResDto.result = false;
-      return registerResDto;
+      throw new Error(e.message);
     }
   }
 
@@ -89,11 +81,9 @@ export class UserService {
 
   async logout(token: string): Promise<boolean> {
     try {
-      console.log(token);
-      const loginUser = this.tokenProvider.validateAndGetUserId(token);
-      console.log('토큰 유효 여부 확인', loginUser);
+      const loginUser = await this.tokenProvider.validateAndGetUserId(token);
 
-      await this.userRepository.refreshTokenToNull(loginUser.msg);
+      await this.userRepository.refreshTokenToNull(loginUser.Token);
 
       return true;
     } catch (e) {
@@ -106,12 +96,12 @@ export class UserService {
     accessToken: string,
     RefreshToken: string,
   ): Promise<AuthUserDto> {
-    const authuserDto = new AuthUserDto();
+    try {
+      const authuserDto = new AuthUserDto();
 
-    if (accessToken) {
-      console.log('액세스 토큰 존재');
-      try {
-        const validToken = this.tokenProvider.validateAndGetUserId(accessToken);
+      if (accessToken) {
+        const validToken =
+          await this.tokenProvider.validateAndGetUserId(accessToken);
 
         console.log(validToken.msg, validToken.result);
 
@@ -124,37 +114,37 @@ export class UserService {
         authuserDto.userId = validToken.msg;
 
         return authuserDto;
-      } catch (e) {
-        // Access token is invalid, proceed to refresh token check
       }
-    }
 
-    if (RefreshToken) {
-      const user =
-        await this.userRepository.findNicknameFromToken(RefreshToken);
-      if (!user) {
-        console.log('리프레시 토큰 유저 없음');
-        authuserDto.result = false;
-        authuserDto.nickname = null;
-        authuserDto.userId = null;
+      if (RefreshToken) {
+        const user =
+          await this.userRepository.findNicknameFromToken(RefreshToken);
+        if (!user) {
+          console.log('리프레시 토큰 유저 없음');
+          authuserDto.result = false;
+          authuserDto.nickname = null;
+          authuserDto.userId = null;
+
+          return authuserDto;
+        }
+
+        const tokenDto = this.tokenProvider.generateAccessToken(user.userId);
+
+        authuserDto.nickname = user.nickname;
+        authuserDto.NewToken = tokenDto.accessToken;
+        authuserDto.userId = user.userId;
+        authuserDto.result = true;
 
         return authuserDto;
       }
 
-      const tokenDto = this.tokenProvider.generateAccessToken(user.userId);
-
-      authuserDto.nickname = user.nickname;
-      authuserDto.NewToken = tokenDto.accessToken;
-      authuserDto.userId = user.userId;
-      authuserDto.result = true;
-
+      // Both tokens are invalid
+      authuserDto.result = false;
+      authuserDto.nickname = '로그인 상태가 아닙니다.';
       return authuserDto;
+    } catch (e) {
+      throw new Error(e.message);
     }
-
-    // Both tokens are invalid
-    authuserDto.result = false;
-    authuserDto.nickname = '로그인 상태가 아닙니다.';
-    return authuserDto;
   }
 
   async checkDupId(UserId: string): Promise<boolean> {

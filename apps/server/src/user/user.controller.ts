@@ -15,9 +15,9 @@ import {
 import { UserService } from './service/user.service';
 import { Response, Request } from 'express';
 import { TokenProvider } from './service/token.provider';
-import { S3Service } from '../s3/s3.service';
+import { S3Service } from './service/s3.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ChatService } from '../chat/chat.service';
+import { ChatService } from 'src/chat/service/chat.service';
 import {
   RegisterResDto,
   ResDto,
@@ -100,15 +100,12 @@ export class UserController {
         return resDto;
       }
 
-      const accessToken = this.tokenProvider.createAccessToken(result.userId);
-      const refreshToken = this.tokenProvider.createRefreshToken(result.userId);
-
-      response.cookie('accessToken', accessToken, {
+      response.cookie('accessToken', result.AccessToken, {
         maxAge: 1800 * 1000, // 30분
         httpOnly: true,
         sameSite: 'lax',
       });
-      response.cookie('refreshToken', refreshToken, {
+      response.cookie('refreshToken', result.RefreshToken, {
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7일
         httpOnly: true,
         sameSite: 'lax',
@@ -178,8 +175,8 @@ export class UserController {
         refreshToken,
       );
 
-      if (authuser.newToken) {
-        response.cookie('accessToken', authuser.newToken, {
+      if (authuser.NewToken) {
+        response.cookie('accessToken', authuser.NewToken, {
           maxAge: 1800 * 1000, // 30분
           httpOnly: true,
           sameSite: 'lax',

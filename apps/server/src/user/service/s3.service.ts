@@ -15,12 +15,14 @@ export class S3Service {
 
   async upload(file: Express.Multer.File): Promise<string> {
     const originalFilename = file.originalname;
-    const extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
-    
+    const extension = originalFilename.substring(
+      originalFilename.lastIndexOf('.'),
+    );
+
     // 파일 이름에 타임스탬프를 추가하여 고유성을 확보
     const timestamp = Date.now();
     const s3FileName = `${originalFilename.replace(/[^a-zA-Z0-9가-힣_.-]/g, '_')}_${timestamp}${extension}`;
-    
+
     const contentType = file.mimetype;
 
     const params = {

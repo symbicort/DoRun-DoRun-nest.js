@@ -20,9 +20,6 @@ export class RegisterResDto {
   userId: string;
 
   @IsString()
-  password: string;
-
-  @IsString()
   email: string;
 }
 

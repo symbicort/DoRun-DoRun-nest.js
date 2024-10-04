@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { PredictionServiceClient } from '@google-cloud/aiplatform';
 import { Value } from '@google-cloud/aiplatform/build/src/schema/predict';
 import * as fs from 'fs';
 import { User } from 'src/user/entity/user.entity';
 import { UserRepository } from 'src/user/repository/user.repository';
-import { MissionEntity } from '../entity/mission.entity';
 import { MissionRepository } from '../repository/mission.repository';
 import { UserMissionEntity } from '../entity/userMission.entity';
 import { UserService } from 'src/user/service/user.service';
@@ -15,7 +13,6 @@ import { MissionDto } from '../dto/mission.dto';
 @Injectable()
 export class MissionService {
   constructor(
-    @InjectRepository(User)
     private readonly userRepository: UserRepository,
     private readonly missionRepository: MissionRepository,
     private readonly userService: UserService,
@@ -147,7 +144,7 @@ export class MissionService {
       return;
     }
     userMission.learn = true;
-    await this.missionRepository.saveMission(userMission);
+    await this.missionRepository.saveUserMission(userMission);
   }
 
   // 채팅창 : 프론트로 문장 전송
@@ -324,6 +321,6 @@ export class MissionService {
     for (const userMission of userMissions) {
       userMission.complete = true;
     }
-    await this.missionRepository.save(userMissions);
+    await this.missionRepository.saveMission(userMissions);
   }
 }

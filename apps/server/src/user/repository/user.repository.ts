@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entity/user.entity';
+import { RegisterDto } from '../dto/user.dto';
 
 @Injectable()
 export class UserRepository {
@@ -9,6 +10,10 @@ export class UserRepository {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
+
+  async save(data: RegisterDto) {
+    return this.userRepository.save(data);
+  }
 
   async existsByUserId(userId: string): Promise<boolean> {
     const count = await this.userRepository.count({ where: { userId } });

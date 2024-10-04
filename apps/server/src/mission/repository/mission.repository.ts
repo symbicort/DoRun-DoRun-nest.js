@@ -47,9 +47,9 @@ export class MissionRepository {
   ): Promise<UserMissionEntity[]> {
     return this.userMissionRepository.find({
       where: {
-        userId: user.userId,
+        userId: user, // User 객체 사용
         missionId: {
-          course: course,
+          course: course, // MissionEntity의 course에 접근
         },
       },
     });
@@ -62,7 +62,7 @@ export class MissionRepository {
   ): Promise<UserMissionEntity[]> {
     return this.userMissionRepository.find({
       where: {
-        userId: user.userId,
+        userId: user, // User 객체 사용
         complete: complete,
         learn: learn,
       },
@@ -76,10 +76,10 @@ export class MissionRepository {
   ): Promise<UserMissionEntity[]> {
     return this.userMissionRepository.find({
       where: {
-        userId: user.userId,
+        userId: user, // User 객체 사용
         learn: learn,
         missionId: {
-          course: course,
+          course: course, // MissionEntity의 course에 접근
         },
       },
     });
@@ -92,8 +92,8 @@ export class MissionRepository {
   ): Promise<UserMissionEntity> {
     return this.userMissionRepository.findOne({
       where: {
-        userId: user,
-        missionId: mission,
+        userId: user, // User 객체 사용
+        missionId: mission, // MissionEntity 객체 사용
         learn: learn,
       },
     });
@@ -106,9 +106,7 @@ export class MissionRepository {
     return this.userMissionRepository.find({
       where: {
         userId: user,
-        missionId: {
-          id: In(missions),
-        },
+        missionId: In(missions),
       },
     });
   }
@@ -118,9 +116,7 @@ export class MissionRepository {
   ): Promise<UserMissionEntity[]> {
     return this.userMissionRepository.find({
       where: {
-        missionId: {
-          id: In(missionIds),
-        },
+        missionId: In(missionIds),
       },
     });
   }
