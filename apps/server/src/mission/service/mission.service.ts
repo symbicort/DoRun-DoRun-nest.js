@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { PredictionServiceClient } from '@google-cloud/aiplatform';
 import { Value } from '@google-cloud/aiplatform/build/src/schema/predict';
 import * as fs from 'fs';
@@ -183,7 +184,8 @@ export class MissionService {
     const result: MissionDto[] = [];
 
     for (const limitedUnusedMission of limitedUnusedMissions) {
-      const userMissionDto: MissionDto = UserMissionDto.builder()
+      const userMissionDto: MissionDto = userMissionDto
+        .builder()
         .missionId(limitedUnusedMission.missionId.missionId)
         .mission(limitedUnusedMission.missionId.mission)
         .meaning(limitedUnusedMission.missionId.meaning)
@@ -310,17 +312,17 @@ export class MissionService {
         );
       for (const userMission of userMissions) {
         userMission.complete = true;
+        await this.missionRepository.saveUserMission(userMission);
       }
-      await this.missionRepository.saveMission(userMissions);
     }
   }
 
-  async updateMissions(missionIds: string[]): Promise<void> {
-    const userMissions =
-      await this.userMissionRepository.findByMissionId_MissionIdIn(missionIds);
-    for (const userMission of userMissions) {
-      userMission.complete = true;
-    }
-    await this.missionRepository.saveMission(userMissions);
-  }
+  // async updateMissions(missionIds: string[]): Promise<void> {
+  //   const userMissions =
+  //     await this.userMissionRepository.findByMissionId_MissionIdIn(missionIds);
+  //   for (const userMission of userMissions) {
+  //     userMission.complete = true;
+  //   }
+  //   await this.missionRepository.saveMission(userMissions);
+  // }
 }

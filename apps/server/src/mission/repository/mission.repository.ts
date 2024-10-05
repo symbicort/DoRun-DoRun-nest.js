@@ -37,6 +37,7 @@ export class MissionRepository {
     return this.userMissionRepository.save(userMission);
   }
 
+  // 초기 미션 생성?
   async saveMission(mission: MissionEntity): Promise<MissionEntity> {
     return this.missionRepository.save(mission);
   }
@@ -62,7 +63,7 @@ export class MissionRepository {
   ): Promise<UserMissionEntity[]> {
     return this.userMissionRepository.find({
       where: {
-        userId: user, // User 객체 사용
+        userId: user,
         complete: complete,
         learn: learn,
       },
