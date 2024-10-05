@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PredictionServiceClient } from '@google-cloud/aiplatform';
-import { Value } from '@google-cloud/aiplatform/build/src/schema/predict';
+import { Value } from '@google-cloud/platform/build/src/schema/predict';
 import * as fs from 'fs';
 import { UserRepository } from 'src/user/repository/user.repository';
 import { MissionRepository } from '../repository/mission.repository';
