@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { PredictionServiceClient } from '@google-cloud/aiplatform';
 import { Value } from '@google-cloud/aiplatform/build/src/schema/predict';
 import * as fs from 'fs';
-import { User } from 'src/user/entity/user.entity';
 import { UserRepository } from 'src/user/repository/user.repository';
 import { MissionRepository } from '../repository/mission.repository';
 import { UserMissionEntity } from '../entity/userMission.entity';
@@ -52,12 +50,19 @@ export class MissionService {
     const missions = await this.missionRepository.findByCourse(course);
 
     for (const mission of missions) {
-      const userMission = UserMissionEntity.builder()
-        .userId(user)
-        .missionId(mission)
-        .complete(false)
-        .learn(false)
-        .build();
+      // const userMission = UserMissionEntity.builder()
+      //   .userId(user)
+      //   .missionId(mission)
+      //   .complete(false)
+      //   .learn(false)
+      //   .build();
+
+      let userMission: UserMissionEntity;
+
+      userMission.userId = user;
+      userMission.missionId = mission;
+      userMission.complete = false;
+      userMission.learn = false;
 
       await this.missionRepository.saveUserMission(userMission);
     }
@@ -99,12 +104,12 @@ export class MissionService {
     const result: MissionDto[] = [];
 
     for (const limitedUnlearnMission of limitedUnlearnMissions) {
-      const userMissionDto: MissionDto = MissionDto.builder()
-        .missionId(limitedUnlearnMission.missionId.missionId)
-        .mission(limitedUnlearnMission.missionId.mission)
-        .meaning(limitedUnlearnMission.missionId.meaning)
-        .complete(limitedUnlearnMission.complete)
-        .build();
+      let userMissionDto: MissionDto;
+
+      userMissionDto.missionId = limitedUnlearnMission.missionId.missionId;
+      userMissionDto.mission = limitedUnlearnMission.missionId.mission;
+      userMissionDto.meaning = limitedUnlearnMission.missionId.meaning;
+      userMissionDto.complete = limitedUnlearnMission.complete;
 
       result.push(userMissionDto);
     }
@@ -184,13 +189,12 @@ export class MissionService {
     const result: MissionDto[] = [];
 
     for (const limitedUnusedMission of limitedUnusedMissions) {
-      const userMissionDto: MissionDto = userMissionDto
-        .builder()
-        .missionId(limitedUnusedMission.missionId.missionId)
-        .mission(limitedUnusedMission.missionId.mission)
-        .meaning(limitedUnusedMission.missionId.meaning)
-        .complete(limitedUnusedMission.complete)
-        .build();
+      let userMissionDto: MissionDto;
+
+      userMissionDto.missionId = limitedUnusedMission.missionId.missionId;
+      userMissionDto.mission = limitedUnusedMission.missionId.mission;
+      userMissionDto.meaning = limitedUnusedMission.missionId.meaning;
+      userMissionDto.complete = limitedUnusedMission.complete;
 
       result.push(userMissionDto);
     }
