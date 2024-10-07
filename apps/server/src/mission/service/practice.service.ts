@@ -25,7 +25,7 @@ export class PracticeService {
       parameters: { maxOutputTokens: 8192, temperature: 0.7, topP: 1 },
     });
 
-    await this.chatService.createConnection(); // 예문 받기 전에 api 인증 만료됐는지 확인, 만료시 갱신
+    // await this.chatService.createConnection(); // 예문 받기 전에 api 인증 만료됐는지 확인, 만료시 갱신
     const response = await this.chatService.getResponseByAuthClient(
       requestBody,
       'text',
