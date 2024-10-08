@@ -1,11 +1,11 @@
 {
   "name": "dorun-dorun-nest",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "deploy": "npm run build && vercel --prod" 
+    "deploy": "npm run build && vercel --prod",
+    "start" : "node apps/server/dist/main" 
   },
   "keywords": [],
   "author": "",
