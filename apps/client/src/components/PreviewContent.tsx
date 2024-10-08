@@ -66,7 +66,7 @@ export default function PreviewContent() {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        'https://43.203.227.36.sslip.io/server/practice/getPractice',
+        'https://43.203.227.36.sslip.io/server/getPractice',
         {
           params: {
             expression: sentence.mission,

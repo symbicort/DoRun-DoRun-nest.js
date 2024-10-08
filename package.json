@@ -5,14 +5,14 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "deploy": "npm run build && vercel --prod",
-    "start" : "node apps/server/dist/main" 
+    "start": "node apps/server/dist/main"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "turbo": "^2.1.2"
+    "turbo": "^2.1.3"
   },
   "workspaces": [
     "apps/*"
