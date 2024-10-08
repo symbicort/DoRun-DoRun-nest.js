@@ -25,12 +25,8 @@ export class PracticeService {
       parameters: { maxOutputTokens: 8192, temperature: 0.7, topP: 1 },
     });
 
-    // await this.chatService.createConnection(); // 예문 받기 전에 api 인증 만료됐는지 확인, 만료시 갱신
-    const response = await this.chatService.getResponseByAuthClient(
-      requestBody,
-      'text',
-    ); // ai 의 답변 받음
-    const result = this.chatService.extractContentOnly(response, 'text'); // 답변중 필요한 내용만 추출
+    const response = await this.chatService.sendTextRequest(requestBody); // ai 의 답변 받음
+    const result = await this.chatService.extractContentOnly(response, 'text'); // 답변중 필요한 내용만 추출
     return this.makeCustomizedJsonForm(result, expression, meaning, level); // 프론트로 반환해주기 전에 요청한 양식에 맞춰서 json 재구성
   }
 

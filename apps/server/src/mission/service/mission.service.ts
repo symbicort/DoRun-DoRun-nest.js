@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PredictionServiceClient } from '@google-cloud/aiplatform';
-import { Value } from '@google-cloud/platform/build/src/schema/predict';
+import { Value } from 'google-protobuf';
 import * as fs from 'fs';
 import { UserRepository } from 'src/user/repository/user.repository';
 import { MissionRepository } from '../repository/mission.repository';
@@ -50,13 +50,6 @@ export class MissionService {
     const missions = await this.missionRepository.findByCourse(course);
 
     for (const mission of missions) {
-      // const userMission = UserMissionEntity.builder()
-      //   .userId(user)
-      //   .missionId(mission)
-      //   .complete(false)
-      //   .learn(false)
-      //   .build();
-
       let userMission: UserMissionEntity;
 
       userMission.userId = user;
@@ -213,7 +206,7 @@ export class MissionService {
       '  "topP": 0.95,\n' +
       '  "topK": 1\n' +
       '}';
-    const project = 'stately-fabric-435204-t1'; // Google Cloud Console 에서 본인 프로젝트 이름 확인
+    const project = 'stately-fabric-435204-t1';
     const location = 'asia-northeast3';
     const publisher = 'google';
     const model = 'text-bison@002';
@@ -222,7 +215,7 @@ export class MissionService {
     const credentialsPath =
       '/home/ubuntu/.config/gcloud/application_default_credentials.json';
 
-    return this.predictTextPrompt(
+    return await this.predictTextPrompt(
       instance,
       parameters,
       project,

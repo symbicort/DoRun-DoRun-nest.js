@@ -53,7 +53,7 @@ export class ChatService {
     };
 
     const response = await this.sendChatRequest(request_message);
-    const content = this.extractContentOnly(response, 'chat');
+    const content = await this.extractContentOnly(response, 'chat');
 
     const [aiMsg, emotion] = content.split(',, ');
     chatDto.aiMsg = aiMsg;
@@ -72,13 +72,13 @@ export class ChatService {
     };
 
     const response = await this.sendTextRequest(request_message);
-    const content = this.extractContentOnly(response, 'text');
+    const content = await this.extractContentOnly(response, 'text');
 
     return content.split('\n');
   }
 
   // Method to send chat request to the API
-  private async sendChatRequest(request_message: any): Promise<any> {
+  async sendChatRequest(request_message: any): Promise<any> {
     const chat = this.chatModel.startChat({});
     const streamResult = await chat.sendMessageStream(
       JSON.stringify(request_message),
@@ -87,7 +87,7 @@ export class ChatService {
   }
 
   // Method to send text correction request to the API
-  private async sendTextRequest(request_message: any): Promise<any> {
+  async sendTextRequest(request_message: any): Promise<any> {
     const chat = this.textModel.startChat({});
     const streamResult = await chat.sendMessageStream(
       JSON.stringify(request_message),
@@ -96,7 +96,10 @@ export class ChatService {
   }
 
   // Extract the content from the API response
-  private extractContentOnly(response: any, responseForm: string): string {
+  async extractContentOnly(
+    response: any,
+    responseForm: string,
+  ): Promise<string> {
     const predictions = response.candidates[0];
     if (responseForm === 'chat') {
       return predictions.content; // 채팅 응답 추출

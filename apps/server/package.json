@@ -38,6 +38,7 @@
     "date-fns": "^4.1.0",
     "elevenlabs": "^0.16.1",
     "elevenlabs-js": "^1.2.6",
+    "google-protobuf": "^3.21.4",
     "mongoose": "^8.6.4",
     "mysql2": "^3.11.3",
     "reflect-metadata": "^0.1.13",
