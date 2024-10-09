@@ -18,6 +18,7 @@ export class RoomController {
   @Get('getRooms')
   async getRooms(@Req() req: Request, @Res() res: Response): Promise<Response> {
     try {
+      console.log('요청 들어옴?');
       const accessToken = req.cookies['accessToken'];
       const refreshToken = req.cookies['RefreshToken'];
 
