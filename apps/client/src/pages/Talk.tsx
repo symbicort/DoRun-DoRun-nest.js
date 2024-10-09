@@ -125,7 +125,7 @@ function Talk() {
 
 	useEffect(() => {
 		async function auth() {
-			const res = await axios.get(`${API_URL}/user/authuser`);
+			const res = await axios.get(`${API_URL}/user/authuser`, { withCredentials: true });
 			const result = res.data;
 			setAuthUser(result);//유저 상태 추가
 		}

@@ -20,7 +20,6 @@ import { UserRepository } from '../repository/user.repository';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
     private readonly userRepository: UserRepository,
     private readonly tokenProvider: TokenProvider,
   ) {}

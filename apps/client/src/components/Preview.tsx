@@ -22,8 +22,9 @@ export default function Preview() {
       const level = 'lv' + linkId[5];
       // 여기에 axios 요청 코드를 작성합니다. 예를 들어,
       const response = await axios.post(
+        // 배포 시 URL 재설정
         //'https://43.203.227.36.sslip.io/server/course',
-        'http://localhost:3050/course'
+        'http://localhost:3050/course',
         {
           course: level,
         }
