@@ -14,10 +14,8 @@ import {
 } from '@nestjs/common';
 import { UserService } from './service/user.service';
 import { Response, Request } from 'express';
-import { TokenProvider } from './service/token.provider';
 import { S3Service } from './service/s3.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ChatService } from 'src/chat/service/chat.service';
 import {
   RegisterResDto,
   ResDto,
@@ -33,9 +31,7 @@ import {
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly tokenProvider: TokenProvider,
     private readonly s3Service: S3Service,
-    private readonly chatService: ChatService,
   ) {}
 
   @Post('register')

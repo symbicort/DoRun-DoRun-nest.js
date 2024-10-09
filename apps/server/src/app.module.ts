@@ -11,8 +11,6 @@ import { UserMissionEntity } from './mission/entity/userMission.entity';
 import { User } from './user/entity/user.entity';
 import { MissionEntity } from './mission/entity/mission.entity';
 
-console.log(process.env.MONGODB_URI)
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -26,13 +24,14 @@ console.log(process.env.MONGODB_URI)
     MongooseModule.forRoot(String(process.env.MONGODB_URI)),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.RDS_MYSQL_HOST,
-      port: Number(process.env.RDS_MYSQL_PORT),
-      username: process.env.RDS_MYSQL_USERNAME,
-      password: process.env.RDS_MYSQL_PW,
-      database: process.env.RDS_MYSQL_NAME,
+      host: process.env.MYSQL_HOST,
+      port: Number(process.env.MYSQL_PORT),
+      username: process.env.MYSQL_USERNAME,
+      password: process.env.MYSQL_PASSWORD,
+      database: process.env.MYSQL_DATABASE,
       entities: [UserMissionEntity, User, MissionEntity],
       synchronize: true,
+      timezone: '+09:00',
     }),
   ],
   controllers: [AppController],

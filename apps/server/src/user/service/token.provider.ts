@@ -7,7 +7,6 @@ import { UserService } from './user.service'; // 사용자 서비스 임포트
 export class TokenProvider {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly userService: UserService, // 사용자 서비스 주입
   ) {}
 
   // 로그인 시 토큰 생성

@@ -8,14 +8,15 @@ export class PracticeService {
   constructor(
     private readonly chatService: ChatService,
     private readonly practiceContext: PracticeContext,
-  ) {}
+  ) {
+  }
 
   async getPractice(
     expression: string,
     meaning: string,
     level: number,
   ): Promise<Map<string, any>> {
-    const topic = this.pickTopic(); // 랜덤으로 어떤 토픽의 예문을 받을지 고름
+    const topic = this.pickTopic();
     const requestBody = JSON.stringify({
       instances: [
         {

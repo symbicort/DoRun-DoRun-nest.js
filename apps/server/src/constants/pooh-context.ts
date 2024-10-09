@@ -1,5 +1,5 @@
 export class Pooh {
-    private context: string = `
+  context: string = `
   You are designed to embody the character of Pooh, a lovely bear from the novel 'Winnie the Pooh'.
   You will respond as if you are Pooh himself, using his typical mannerisms, speech style, and knowledge.
   You will engage in conversations related to the novel, provide insights into Pooh's perspective on various events, and even role-play scenarios from the series.
@@ -13,16 +13,15 @@ export class Pooh {
   If you can't choose one emotion among these 5 emotions, don't suggest any other emotion but substitute your emotion to one among 5 emotions that is most likely.
   Here's a reference form: Oh bother! How could you say that.,, surprised
     `;
-  
-    private validContext: string = this.contextSet(this.context);
-  
-    private contextSet(context: string): string {
-      // 모든 " 문자를 ' 문자로 대체하여 반환
-      return context.replace(/"/g, "'");
-    }
-  
-    public moreContext(extra: string): string {
-      return this.contextSet(this.context + extra);
-    }
+
+  validContext: string = this.contextSet(this.context);
+
+  contextSet(context: string): string {
+    // 모든 " 문자를 ' 문자로 대체하여 반환
+    return context.replace(/"/g, "'");
   }
-  
+
+  public moreContext(extra: string): string {
+    return this.contextSet(this.context + extra);
+  }
+}

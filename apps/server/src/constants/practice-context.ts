@@ -1,47 +1,47 @@
 export class PracticeContext {
-    public topic0: string = `
+  public topic0: string = `
         주제는 취미와 관계 되어야 해.
     `;
-    public topic1: string = `
+  public topic1: string = `
         주제는 남녀간의 사랑과 관계 되어야 해.
     `;
-    public topic2: string = `
+  public topic2: string = `
         주제는 쇼핑과 관계 되어야 해.
     `;
-    public topic3: string = `
+  public topic3: string = `
         주제는 친구와 관계 되어야 해.
     `;
-    public topic4: string = `
+  public topic4: string = `
         주제는 최근 일어나는 이슈(news)와 관계 되어야 해.
     `;
-    public topic5: string = `
+  public topic5: string = `
         주제는 정치와 관계 되어야 해.
     `;
-    public topic6: string = `
+  public topic6: string = `
         주제는 음식과 관계 되어야 해.
     `;
-    public topic7: string = `
+  public topic7: string = `
         주제는 가족과 관계 되어야 해.
     `;
-    public topic8: string = `
+  public topic8: string = `
         주제는 학교생활과 관계 되어야 해.
     `;
-    public topic9: string = `
+  public topic9: string = `
         주제는 직장생활과 관계 되어야 해.
     `;
 
-    public common_context1: string = `
+  public common_context1: string = `
         너에게 영어 표현을 줄거야. 
         이 영어표현을 통해 영어 회화 공부를 하는데 도움이 되는 문장과 대화를 나에게 넘겨줘.
         먼저 그 표현을 사용한 문장 세개를 줘.
     `;
-    public common_context2: string = `
+  public common_context2: string = `
         그리고 나서 그 두 문장으로 구성된 대화를 하나 줘. 
         이때 그 표현은 두 문장중 한 문장에만 포함시켜.
         첫번째 문장에 포함시켜도 되고 두번째 문장에 포함시켜도 돼.
         대화의 
     `;
-    public common_context3: string = `
+  public common_context3: string = `
         그리고 이 모든걸 쉼표로 나누어 다섯개의 parameter로 읽힐수 있도록 보내줘. 
         반드시 너는 나에게 총 다섯개의 문장만 보내줘야해. 
         그리고 각 다섯문장 뒤에는 괄호가 열리고 그 안에 한국어로 해석된 문장이 뒤따라서 짝을 이루어야해. 
