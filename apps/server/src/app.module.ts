@@ -11,17 +11,19 @@ import { UserMissionEntity } from './mission/entity/userMission.entity';
 import { User } from './user/entity/user.entity';
 import { MissionEntity } from './mission/entity/mission.entity';
 
+console.log(process.env.MONGODB_URI)
+
 @Module({
   imports: [
-    UserModule,
-    ChatModule,
-    MissionModule,
-    MongooseModule.forRoot(String(process.env.MONGODB_URL)),
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
       envFilePath: '.env',
     }),
+    UserModule,
+    ChatModule,
+    MissionModule,
+    MongooseModule.forRoot(String(process.env.MONGODB_URI)),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.RDS_MYSQL_HOST,

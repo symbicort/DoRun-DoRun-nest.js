@@ -149,7 +149,7 @@ function Talk() {
 			setAiMsg((prevData: AiMsg) => ({ ...prevData, ...result }));
 
 			setAudioLoad(false);
-			const file = await fetch('/pooh.wav', { credentials: 'include' });//오디오 파일 가져오기
+			const file = await fetch('/pooh.mp3', { credentials: 'include' });//오디오 파일 가져오기
 			const blob = await file.blob();
 			const objectURL = URL.createObjectURL(blob);
 

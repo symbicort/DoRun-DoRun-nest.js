@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { ElevenLabs } from 'elevenlabs-js';
+import { ElevenLabs, ElevenLabsClient } from 'elevenlabs';
 import { writeFile } from 'fs/promises';
 
 @Injectable()
 export class TTSService {
-  private readonly xiApiKey: string = process.env.TTS_API_KEY; // 환경 변수에서 API 키를 가져옵니다.
+  private readonly xiApiKey: string = process.env.TTS_API_KEY;
+  private readonly voice_ID: string = process.env.TTS_VOICE_ID;
   private readonly SERVER_PATH =
-    '/home/ubuntu/DoRun-DoRun-nest.js/frontend/dist/pooh.wav'; // 고정 경로
+    '/home/ubuntu/DoRun-DoRun-nest.js/frontend/dist/pooh.mp3';
 
-  private elevenLabs: ElevenLabs;
+  private client: ElevenLabsClient;
 
   constructor() {
-    this.elevenLabs = new ElevenLabs(this.xiApiKey);
+    this.client = new ElevenLabsClient({ apiKey: this.xiApiKey});
   }
 
   async callExternalApi(text: string): Promise<void> {
@@ -24,10 +25,11 @@ export class TTSService {
     };
 
     try {
-      const audioStream = await this.elevenLabs.textToSpeech({
+      const audioStream = await this.client.textToSpeech.convert(this.voice_ID,{
         text: text,
-        model_id: modelId,
         voice_settings: voiceSettings,
+        optimize_streaming_latency: ElevenLabs.OptimizeStreamingLatency.One,
+        output_format: ElevenLabs.OutputFormat.Mp344100128
       });
 
       await writeFile(this.SERVER_PATH, audioStream, {
