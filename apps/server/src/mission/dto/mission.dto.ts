@@ -2,7 +2,7 @@ import { IsString, IsBoolean } from 'class-validator';
 
 export class MissionDto {
   @IsString()
-  missionId: string;
+  missionId: number;
 
   @IsString()
   mission: string;

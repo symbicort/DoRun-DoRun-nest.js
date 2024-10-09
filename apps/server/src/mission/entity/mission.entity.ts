@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('mission')
 export class MissionEntity {
-  @PrimaryColumn({ name: 'missionId' })
-  missionId: string;
+  @PrimaryGeneratedColumn({ name: 'mission_id' })
+  missionId: number;
 
   @Column({ name: 'course' })
   course: string;

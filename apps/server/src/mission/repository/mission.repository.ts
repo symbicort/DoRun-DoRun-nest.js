@@ -20,12 +20,12 @@ export class MissionRepository {
   }
 
   // missionId로 mission 찾기
-  async findByMissionId(missionId: string): Promise<MissionEntity | undefined> {
+  async findByMissionId(missionId: number): Promise<MissionEntity | undefined> {
     return this.missionRepository.findOne({ where: { missionId } });
   }
 
   // missionId 리스트에 해당하는 mission 찾기
-  async findByMissionIdIn(missionIds: string[]): Promise<MissionEntity[]> {
+  async findByMissionIdIn(missionIds: number[]): Promise<MissionEntity[]> {
     return this.missionRepository.find({
       where: { missionId: In(missionIds) },
     });

@@ -113,7 +113,7 @@ export class MissionService {
   async setLearnMissionsForUser(
     accessToken: string,
     refreshToken: string,
-    missionId: string,
+    missionId: number,
   ): Promise<void> {
     const authuserDto: AuthUserDto = await this.userService.authuser(
       accessToken,

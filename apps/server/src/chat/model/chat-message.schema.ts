@@ -5,7 +5,7 @@ export type MessageDocument = HydratedDocument<Message>;
 
 @Schema({ collection: 'messages', timestamps: true })
 export class Message {
-  @Prop({type: Types.ObjectId})
+  @Prop({ type: Types.ObjectId })
   _id: Types.ObjectId;
 
   @Prop({ required: true })

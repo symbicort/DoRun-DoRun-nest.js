@@ -5,7 +5,7 @@ export type RoomDocument = HydratedDocument<Room>;
 
 @Schema({ collection: 'rooms', timestamps: true })
 export class Room {
-  @Prop({type: Types.ObjectId})
+  @Prop({ type: Types.ObjectId })
   _id: Types.ObjectId;
 
   @Prop({ required: true })

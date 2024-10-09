@@ -54,7 +54,7 @@ export class MissionController {
 
   @Post('learned')
   async setLearnMissionsForUser(
-    @Body() request: { mission_id: string },
+    @Body() request: { mission_id: number },
     @Req() req: Request,
   ): Promise<void> {
     const { mission_id } = request;

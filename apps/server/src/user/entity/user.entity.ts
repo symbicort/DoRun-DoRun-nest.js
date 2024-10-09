@@ -11,7 +11,7 @@ export class User {
   @PrimaryGeneratedColumn({ name: 'user_num' })
   userNum: number;
 
-  @Column({ name: 'userId', nullable: false })
+  @Column({ name: 'user_id', nullable: false })
   userId: string;
 
   @Column({ name: 'password', nullable: false })
