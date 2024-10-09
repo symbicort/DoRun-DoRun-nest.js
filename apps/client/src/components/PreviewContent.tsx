@@ -40,7 +40,9 @@ export default function PreviewContent() {
     try {
       const level = 'lv' + urlID![5];
       const response = await axios.get(
-        'https://43.203.227.36.sslip.io/server/learn',
+        // 배포 시 URL 재설정
+        // 'https://43.203.227.36.sslip.io/server/learn',
+        'http://localhost:3050/learn',
         {
           params: { course: level },
         }
@@ -66,7 +68,9 @@ export default function PreviewContent() {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        'https://43.203.227.36.sslip.io/server/getPractice',
+        // 배포 시 URL 설정
+        // 'https://43.203.227.36.sslip.io/server/getPractice',
+        'http://localhost:3050/getPractice',
         {
           params: {
             expression: sentence.mission,
@@ -100,7 +104,11 @@ export default function PreviewContent() {
         (sentence) =>
           sentence.mission === selectedSentenceData?.sentence.substring(5)
       );
-      await axios.post('https://43.203.227.36.sslip.io/server/learned', {
+      await axios.post(
+        // 배포 시 URL 재설정
+        // 'https://43.203.227.36.sslip.io/server/learned', 
+        'http://localhost:3050/learned',
+        {
         mission_id: sentences[index].missionId,
       });
 

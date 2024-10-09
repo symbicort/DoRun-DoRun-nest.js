@@ -31,7 +31,9 @@ export default function ReviewContent() {
     const fetchData = async () => {
       try {
         const response = await axios.get<ConversationData[]>(
-          `https://43.203.227.36.sslip.io/server/message/getMessagesByRoomid`,
+          // 배포 시 URL 재설정
+          // `https://43.203.227.36.sslip.io/server/message/getMessagesByRoomid`,
+          'http://localhost:3050/message/getMessagesByRoomid',
           { params: { roomid: id } }
         );
         setConversationData(response.data);

@@ -87,7 +87,9 @@ function Talk() {
 	const [missions, setMissions] = useState<Mission[]>([]);//미션 리스트
 	const [missionsComplete, setMissionsComplete] = useState<string[]>([]); //미션 완료 목록
 
-  const API_URL = 'https://43.203.227.36.sslip.io/server';
+	// 배포 시 URL 재설정
+	// const API_URL = 'https://43.203.227.36.sslip.io/server';
+	const API_URL: string = 'http://localhost:3050'
 	// 데이터
 	// const data: Mission[] = [
 	// 	{

@@ -62,7 +62,9 @@ export default function Review() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          'https://43.203.227.36.sslip.io/server/room/getRooms'
+          // 배포 시 URL 재설정
+          //'https://43.203.227.36.sslip.io/server/room/getRooms'
+          'http://localhost:3050/room/getRooms'
         );
         setReviewDatas(response.data);
         setDummyDatas(datas.reviewDatas);

@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const API_URL: string = 'https://43.203.227.36.sslip.io/server';
+// 배포 시 URL 재설정
+// const API_URL: string = 'https://43.203.227.36.sslip.io/server';
+
+const API_URL: string = 'http://localhost:3050'
 
 export const userIdCheckApi = async (InputId: string) => {
     const response = await axios.get(`${API_URL}/user/checkDupId`, { params: { InputId } });
