@@ -16,17 +16,17 @@ export class MissionRepository {
 
   // course에 해당하는 mission 찾기
   async findByCourse(course: string): Promise<MissionEntity[]> {
-    return this.missionRepository.find({ where: { course } });
+    return await this.missionRepository.find({ where: { course } });
   }
 
   // missionId로 mission 찾기
   async findByMissionId(missionId: number): Promise<MissionEntity | undefined> {
-    return this.missionRepository.findOne({ where: { missionId } });
+    return await this.missionRepository.findOne({ where: { missionId } });
   }
 
   // missionId 리스트에 해당하는 mission 찾기
   async findByMissionIdIn(missionIds: number[]): Promise<MissionEntity[]> {
-    return this.missionRepository.find({
+    return await this.missionRepository.find({
       where: { missionId: In(missionIds) },
     });
   }
@@ -34,24 +34,27 @@ export class MissionRepository {
   async saveUserMission(
     userMission: UserMissionEntity,
   ): Promise<UserMissionEntity> {
-    return this.userMissionRepository.save(userMission);
+    return await this.userMissionRepository.save(userMission);
   }
 
   // 초기 미션 생성?
   async saveMission(mission: MissionEntity): Promise<MissionEntity> {
-    return this.missionRepository.save(mission);
+    return await this.missionRepository.save(mission);
   }
 
   async findByUserIdAndMissionId_Course(
     user: User,
-    course: MissionEntity[],
+    courseMission: MissionEntity[],
   ): Promise<UserMissionEntity[]> {
-    return this.userMissionRepository.find({
+    const missions: number[] = courseMission.map(
+      (mission) => mission.missionId,
+    );
+
+    return await this.userMissionRepository.find({
       where: {
-        userId: user, // User 객체 사용
-        missionId: course,
+        user: user, // User 객체 사용
+        mission: In(missions),
       },
-      relations: ['missionId'],
     });
   }
 
@@ -60,9 +63,9 @@ export class MissionRepository {
     complete: boolean,
     learn: boolean,
   ): Promise<UserMissionEntity[]> {
-    return this.userMissionRepository.find({
+    return await this.userMissionRepository.find({
       where: {
-        userId: user,
+        user: user,
         complete: complete,
         learn: learn,
       },
@@ -74,11 +77,11 @@ export class MissionRepository {
     learn: boolean,
     course: string,
   ): Promise<UserMissionEntity[]> {
-    return this.userMissionRepository.find({
+    return await this.userMissionRepository.find({
       where: {
-        userId: user, // User 객체 사용
+        user: user, // User 객체 사용
         learn: learn,
-        missionId: {
+        mission: {
           course: course, // MissionEntity의 course에 접근
         },
       },
@@ -90,10 +93,10 @@ export class MissionRepository {
     mission: MissionEntity,
     learn: boolean,
   ): Promise<UserMissionEntity> {
-    return this.userMissionRepository.findOne({
+    return await this.userMissionRepository.findOne({
       where: {
-        userId: user, // User 객체 사용
-        missionId: mission, // MissionEntity 객체 사용
+        user: user, // User 객체 사용
+        mission: mission, // MissionEntity 객체 사용
         learn: learn,
       },
     });
@@ -103,10 +106,10 @@ export class MissionRepository {
     user: User,
     missions: string[],
   ): Promise<UserMissionEntity[]> {
-    return this.userMissionRepository.find({
+    return await this.userMissionRepository.find({
       where: {
-        userId: user,
-        missionId: In(missions),
+        user: user,
+        mission: In(missions),
       },
     });
   }
@@ -114,9 +117,9 @@ export class MissionRepository {
   async findByMissionId_MissionIdIn(
     missionIds: string[],
   ): Promise<UserMissionEntity[]> {
-    return this.userMissionRepository.find({
+    return await this.userMissionRepository.find({
       where: {
-        missionId: In(missionIds),
+        mission: In(missionIds),
       },
     });
   }

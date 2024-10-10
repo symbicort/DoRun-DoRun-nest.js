@@ -15,11 +15,11 @@ export class UserMissionEntity {
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
-  userId: User;
+  user: User;
 
   @ManyToOne(() => MissionEntity)
   @JoinColumn({ name: 'mission_id' })
-  missionId: MissionEntity;
+  mission: MissionEntity;
 
   @Column({ name: 'complete', default: false })
   complete: boolean;

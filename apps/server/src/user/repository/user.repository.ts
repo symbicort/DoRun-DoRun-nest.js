@@ -12,7 +12,7 @@ export class UserRepository {
   ) {}
 
   async save(data: RegisterDto) {
-    return this.userRepository.save(data);
+    return await this.userRepository.save(data);
   }
 
   async existsByUserId(userId: string): Promise<boolean> {
@@ -26,11 +26,11 @@ export class UserRepository {
   }
 
   async findByNickname(nickname: string): Promise<User | undefined> {
-    return this.userRepository.findOne({ where: { nickname } });
+    return await this.userRepository.findOne({ where: { nickname } });
   }
 
   async findByUserId(userId: string): Promise<User | undefined> {
-    return this.userRepository.findOne({ where: { userId } });
+    return await this.userRepository.findOne({ where: { userId } });
   }
 
   async updateRefreshToken(
@@ -65,7 +65,9 @@ export class UserRepository {
   }
 
   async findNicknameFromToken(refreshToken: string): Promise<User | undefined> {
-    return this.userRepository.findOne({ where: { refreshKey: refreshToken } });
+    return await this.userRepository.findOne({
+      where: { refreshKey: refreshToken },
+    });
   }
 
   async updatePassword(userId: string, encryptPw: string): Promise<void> {

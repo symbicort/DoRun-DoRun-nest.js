@@ -37,6 +37,8 @@ export class MissionService {
       const courseMission: MissionEntity[] =
         await this.missionRepository.findByCourse(course);
 
+      console.log('미션 테이블 확인', courseMission);
+
       // user 찾기
       const userId = authuserDto.userId;
       const user = await this.userRepository.findByUserId(userId);
@@ -47,25 +49,23 @@ export class MissionService {
           user,
           courseMission,
         );
+
       if (existingMissions.length > 0) {
         return; // 이미 해당 코스에 대한 미션 데이터가 있으면 더 이상 진행하지 않음
       }
 
-      // 선택한 코스에 해당하는 미션 데이터
-      const missions = await this.missionRepository.findByCourse(course);
+      for (const mission of courseMission) {
+        const userMission = new UserMissionEntity();
 
-      for (const mission of missions) {
-        let userMission: UserMissionEntity;
-
-        userMission.userId = user;
-        userMission.missionId = mission;
+        userMission.user = user;
+        userMission.mission = mission;
         userMission.complete = false;
         userMission.learn = false;
 
         await this.missionRepository.saveUserMission(userMission);
       }
     } catch (e) {
-      console.error(e.message);
+      console.error(e);
     }
   }
 
@@ -107,9 +107,9 @@ export class MissionService {
     for (const limitedUnlearnMission of limitedUnlearnMissions) {
       let userMissionDto: MissionDto;
 
-      userMissionDto.missionId = limitedUnlearnMission.missionId.missionId;
-      userMissionDto.mission = limitedUnlearnMission.missionId.mission;
-      userMissionDto.meaning = limitedUnlearnMission.missionId.meaning;
+      userMissionDto.missionId = limitedUnlearnMission.mission.missionId;
+      userMissionDto.mission = limitedUnlearnMission.mission.mission;
+      userMissionDto.meaning = limitedUnlearnMission.mission.meaning;
       userMissionDto.complete = limitedUnlearnMission.complete;
 
       result.push(userMissionDto);
@@ -193,9 +193,9 @@ export class MissionService {
     for (const limitedUnusedMission of limitedUnusedMissions) {
       let userMissionDto: MissionDto;
 
-      userMissionDto.missionId = limitedUnusedMission.missionId.missionId;
-      userMissionDto.mission = limitedUnusedMission.missionId.mission;
-      userMissionDto.meaning = limitedUnusedMission.missionId.meaning;
+      userMissionDto.missionId = limitedUnusedMission.mission.missionId;
+      userMissionDto.mission = limitedUnusedMission.mission.mission;
+      userMissionDto.meaning = limitedUnusedMission.mission.meaning;
       userMissionDto.complete = limitedUnusedMission.complete;
 
       result.push(userMissionDto);

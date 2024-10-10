@@ -7,9 +7,6 @@ import { MissionModule } from './mission/mission.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserMissionEntity } from './mission/entity/userMission.entity';
-import { User } from './user/entity/user.entity';
-import { MissionEntity } from './mission/entity/mission.entity';
 
 @Module({
   imports: [
@@ -29,9 +26,11 @@ import { MissionEntity } from './mission/entity/mission.entity';
       username: process.env.MYSQL_USERNAME,
       password: process.env.MYSQL_PASSWORD,
       database: process.env.MYSQL_DATABASE,
-      entities: [UserMissionEntity, User, MissionEntity],
-      synchronize: true,
+      // entities: [UserMissionEntity, User, MissionEntity],
+      synchronize: false,
+      autoLoadEntities: true,
       timezone: '+09:00',
+      logging: false,
     }),
   ],
   controllers: [AppController],
