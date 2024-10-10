@@ -9,7 +9,7 @@ export default function Myroom (){
         const fetchData = async () => {
             try {
                 const API_URL = '';
-                const response = await axios.get(API_URL);
+                const response = await axios.get(API_URL, {withCredentials: true});
                 setData(response.data);
             } catch (error) {
                 console.error(error);

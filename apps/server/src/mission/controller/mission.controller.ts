@@ -6,12 +6,12 @@ import {
   Query,
   HttpStatus,
   HttpException,
-  Res,
   Req,
+  Res,
 } from '@nestjs/common';
 import { MissionService } from '../service/mission.service';
-import { MissionDto } from '../dto/mission.dto';
 import { Request, Response } from 'express';
+import { MissionDto } from '../dto/mission.dto';
 import { PracticeService } from '../service/practice.service';
 
 @Controller()
@@ -22,13 +22,12 @@ export class MissionController {
   ) {}
 
   @Post('course')
-  async addUserMissionsForCourse(
-    @Body() request: { course: string },
-    @Req() req: Request,
-  ): Promise<void> {
-    const { course } = request;
+  async addUserMissionsForCourse(@Req() req: Request): Promise<void> {
     const accessToken = req.cookies['accessToken'];
     const refreshToken = req.cookies['RefreshToken'];
+    const { course } = req.body;
+
+    console.log('course 생성', course);
 
     await this.missionService.addUserMissionsForCourse(
       course,
@@ -45,7 +44,7 @@ export class MissionController {
     const accessToken = req.cookies['accessToken'];
     const refreshToken = req.cookies['RefreshToken'];
 
-    return this.missionService.getUnLearnMissionsForUser(
+    return await this.missionService.getUnLearnMissionsForUser(
       course,
       accessToken,
       refreshToken,
@@ -73,9 +72,9 @@ export class MissionController {
     @Req() req: Request,
   ): Promise<MissionDto[]> {
     const accessToken = req.cookies['accessToken'];
-    const refreshToken = req.cookies['RefreshToken'];
+    const refreshToken = req.cookies['refreshToken'];
 
-    return this.missionService.getUncompletedMissionsForUser(
+    return await this.missionService.getUncompletedMissionsForUser(
       accessToken,
       refreshToken,
     );

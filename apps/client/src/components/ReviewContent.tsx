@@ -34,7 +34,7 @@ export default function ReviewContent() {
           // 배포 시 URL 재설정
           // `https://43.203.227.36.sslip.io/server/message/getMessagesByRoomid`,
           'http://localhost:3050/message/getMessagesByRoomid',
-          { params: { roomid: id } }
+          { params: { roomid: id },withCredentials: true }
         );
         setConversationData(response.data);
       } catch (error) {

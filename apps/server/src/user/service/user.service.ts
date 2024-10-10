@@ -137,7 +137,6 @@ export class UserService {
         return authuserDto;
       }
 
-      // Both tokens are invalid
       authuserDto.result = false;
       authuserDto.nickname = '로그인 상태가 아닙니다.';
       return authuserDto;

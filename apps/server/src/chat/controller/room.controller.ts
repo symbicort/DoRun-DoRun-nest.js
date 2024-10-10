@@ -18,17 +18,18 @@ export class RoomController {
   @Get('getRooms')
   async getRooms(@Req() req: Request, @Res() res: Response): Promise<Response> {
     try {
-      console.log('요청 들어옴?');
       const accessToken = req.cookies['accessToken'];
-      const refreshToken = req.cookies['RefreshToken'];
+      const refreshToken = req.cookies['refreshToken'];
 
       const authUser: AuthUserDto = await this.userService.authuser(
         accessToken,
         refreshToken,
       );
+
       const roomDtos: RoomDto[] = await this.roomService.findAllByUserid(
         authUser.userId,
       );
+
       return res.json(roomDtos);
     } catch (error) {
       console.error(error);

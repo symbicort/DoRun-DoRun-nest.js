@@ -44,15 +44,14 @@ export class MissionRepository {
 
   async findByUserIdAndMissionId_Course(
     user: User,
-    course: string,
+    course: MissionEntity[],
   ): Promise<UserMissionEntity[]> {
     return this.userMissionRepository.find({
       where: {
         userId: user, // User 객체 사용
-        missionId: {
-          course: course, // MissionEntity의 course에 접근
-        },
+        missionId: course,
       },
+      relations: ['missionId'],
     });
   }
 

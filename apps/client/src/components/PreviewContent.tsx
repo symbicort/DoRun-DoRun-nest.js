@@ -45,7 +45,8 @@ export default function PreviewContent() {
         'http://localhost:3050/learn',
         {
           params: { course: level },
-        }
+          withCredentials: true
+        },
       );
       if (!response.data) {
         if (
@@ -76,7 +77,8 @@ export default function PreviewContent() {
             expression: sentence.mission,
             meaning: sentence.meaning,
             level: Number(sentence.missionId.split('_')[0].substring(2)),
-          },
+            
+          },withCredentials: true
         }
       );
       setSelectedSentenceData(response.data);

@@ -7,7 +7,7 @@ export default function CheerioExample() {
     useEffect(() => {
         const main = async () => {
             const url = 'https://devscb.com/';
-            const response = await axios.get(url);
+            const response = await axios.get(url, {withCredentials: true});
             const html = response.data;
 
             

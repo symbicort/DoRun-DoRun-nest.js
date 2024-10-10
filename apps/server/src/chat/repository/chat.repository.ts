@@ -15,12 +15,19 @@ export class ChatRepository {
 
   async findRoomId(roomid: string): Promise<MessageDto[]> {
     const messages = await this.messageModel.find({ roomid }).exec();
+
+    console.log(messages);
     return messages.map((message) => {
       return {
         roomid: message.roomid,
         content: message.content,
         grammarValid: message.grammarValid,
         id: message._id.toString(),
+        userid: message.userid,
+        ai: message.ai,
+        userSpeaking: message.userSpeaking,
+        createdAt: message.createdAt,
+        correctedContent: message.correctedContent,
       } as MessageDto;
     });
   }

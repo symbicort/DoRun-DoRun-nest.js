@@ -114,7 +114,7 @@ function Talk() {
 
 	const getMissions = async () => {
 		try {
-			const response = await axios.get<Mission[]>(`${API_URL}/missions`);
+			const response = await axios.get<Mission[]>(`${API_URL}/missions`, { withCredentials: true });
 			// console.log('미션 데이터:', response.data);
 			setMissions(response.data);
 			// setMissions(data); // 더미 데이터
@@ -199,7 +199,7 @@ function Talk() {
 			const response = await axios.post(`${API_URL}/checkMission`, {
 				missions: reducedMissions,
 				chat: inputText,
-			});
+			}, {withCredentials: true});
 			const checkData = response.data;
 
 			// 백엔드에서 배열로 데이터를 전송하도록 AI 프롬프팅을 했지만 배열 모양으로만 보내는 경우가 있어
@@ -326,8 +326,8 @@ function Talk() {
 							{
 								headers: {
 									'Content-Type': 'application/json',
-								},
-							}
+								},withCredentials: true
+							},
 						);
 						// console.log('미션 완료 응답:', response.data);
 					} catch (error) {
@@ -407,7 +407,7 @@ function Talk() {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},
-				// ,withCredentials: true,
+				withCredentials: true,
 			});
 			// console.log('Audio data sent successfully:', response.data);
 			

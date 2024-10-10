@@ -85,7 +85,8 @@ export default function Mypage() {
     if (confirmWithdraw) {
       try {
         const response = await axios.delete(`${API_URL}/user/withdraw`, {
-          data: { userId: getUser.userId } 
+          data: { userId: getUser.userId }, 
+          withCredentials: true
         });
         console.log(response.data);
         navigate('/');

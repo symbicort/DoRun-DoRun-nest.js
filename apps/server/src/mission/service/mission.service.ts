@@ -8,6 +8,7 @@ import { UserMissionEntity } from '../entity/userMission.entity';
 import { UserService } from 'src/user/service/user.service';
 import { AuthUserDto } from 'src/user/dto/user.dto';
 import { MissionDto } from '../dto/mission.dto';
+import { MissionEntity } from '../entity/mission.entity';
 
 @Injectable()
 export class MissionService {
@@ -23,41 +24,48 @@ export class MissionService {
     accessToken: string,
     refreshToken: string,
   ): Promise<void> {
-    const authuserDto: AuthUserDto = await this.userService.authuser(
-      accessToken,
-      refreshToken,
-    );
-
-    if (!authuserDto.result) {
-      return;
-    }
-
-    // user 찾기
-    const userId = authuserDto.userId;
-    const user = await this.userRepository.findByUserId(userId);
-
-    // 이미 존재하는 미션인지 확인
-    const existingMissions =
-      await this.missionRepository.findByUserIdAndMissionId_Course(
-        user,
-        course,
+    try {
+      const authuserDto: AuthUserDto = await this.userService.authuser(
+        accessToken,
+        refreshToken,
       );
-    if (existingMissions.length > 0) {
-      return; // 이미 해당 코스에 대한 미션 데이터가 있으면 더 이상 진행하지 않음
-    }
 
-    // 선택한 코스에 해당하는 미션 데이터
-    const missions = await this.missionRepository.findByCourse(course);
+      if (!authuserDto.result) {
+        return;
+      }
 
-    for (const mission of missions) {
-      let userMission: UserMissionEntity;
+      const courseMission: MissionEntity[] =
+        await this.missionRepository.findByCourse(course);
 
-      userMission.userId = user;
-      userMission.missionId = mission;
-      userMission.complete = false;
-      userMission.learn = false;
+      // user 찾기
+      const userId = authuserDto.userId;
+      const user = await this.userRepository.findByUserId(userId);
 
-      await this.missionRepository.saveUserMission(userMission);
+      // 이미 존재하는 미션인지 확인
+      const existingMissions =
+        await this.missionRepository.findByUserIdAndMissionId_Course(
+          user,
+          courseMission,
+        );
+      if (existingMissions.length > 0) {
+        return; // 이미 해당 코스에 대한 미션 데이터가 있으면 더 이상 진행하지 않음
+      }
+
+      // 선택한 코스에 해당하는 미션 데이터
+      const missions = await this.missionRepository.findByCourse(course);
+
+      for (const mission of missions) {
+        let userMission: UserMissionEntity;
+
+        userMission.userId = user;
+        userMission.missionId = mission;
+        userMission.complete = false;
+        userMission.learn = false;
+
+        await this.missionRepository.saveUserMission(userMission);
+      }
+    } catch (e) {
+      console.error(e.message);
     }
   }
 
@@ -155,6 +163,7 @@ export class MissionService {
       accessToken,
       refreshToken,
     );
+
     if (!authuserDto.result) {
       return [];
     }
@@ -191,6 +200,9 @@ export class MissionService {
 
       result.push(userMissionDto);
     }
+
+    console.log('결과 확인', result);
+
     return result;
   }
 
@@ -212,8 +224,12 @@ export class MissionService {
     const model = 'text-bison@002';
 
     // 인증 파일의 경로
+    // const credentialsPath =
+    ('/home/ubuntu/.config/gcloud/application_default_credentials.json');
+
+    // 배포 시 수정
     const credentialsPath =
-      '/home/ubuntu/.config/gcloud/application_default_credentials.json';
+      '/Users/jeongwon/DoRun-DoRun-nest.js/apps/server/application_default_credentials.json';
 
     return await this.predictTextPrompt(
       instance,
