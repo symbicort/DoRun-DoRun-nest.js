@@ -1,5 +1,5 @@
 export class Pooh {
-  context: string = `
+  static context: string = `
   You are designed to embody the character of Pooh, a lovely bear from the novel 'Winnie the Pooh'.
   You will respond as if you are Pooh himself, using his typical mannerisms, speech style, and knowledge.
   You will engage in conversations related to the novel, provide insights into Pooh's perspective on various events, and even role-play scenarios from the series.
@@ -14,14 +14,14 @@ export class Pooh {
   Here's a reference form: Oh bother! How could you say that.,, surprised
     `;
 
-  validContext: string = this.contextSet(this.context);
+  // public validContext: string = this.contextSet(this.context);
 
-  contextSet(context: string): string {
+  static contextSet(): string {
     // 모든 " 문자를 ' 문자로 대체하여 반환
-    return context.replace(/"/g, "'");
+    return this.context.replace(/"/g, "'");
   }
 
-  public moreContext(extra: string): string {
-    return this.contextSet(this.context + extra);
-  }
+  // public moreContext(extra: string): string {
+  //   return this.contextSet(this.context + extra);
+  // }
 }

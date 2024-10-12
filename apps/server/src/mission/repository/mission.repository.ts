@@ -69,7 +69,9 @@ export class MissionRepository {
   ): Promise<UserMissionEntity[]> {
     return await this.userMissionRepository.find({
       where: {
-        user: user,
+        user: {
+          userNum: user.userNum,
+        },
         complete: complete,
         learn: learn,
       },

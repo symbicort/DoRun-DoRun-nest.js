@@ -14,7 +14,7 @@ export class UserMissionEntity {
   no: number;
 
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn({ name: 'user_num' })
   user: User;
 
   @ManyToOne(() => MissionEntity)

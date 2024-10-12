@@ -48,12 +48,13 @@ export class ChatService {
     const msgQuery = this.makeMessagesQuery(messages);
 
     const request_message = {
-      context: Pooh,
+      context: Pooh.contextSet(),
       messages: [msgQuery],
     };
 
     const response = await this.sendChatRequest(request_message);
-    const content = await this.extractContentOnly(response, 'chat');
+
+    const content = response.candidates[0].content.parts[0].text;
 
     const [aiMsg, emotion] = content.split(',, ');
     chatDto.aiMsg = aiMsg;
@@ -72,9 +73,12 @@ export class ChatService {
     };
 
     const response = await this.sendTextRequest(request_message);
-    const content = await this.extractContentOnly(response, 'text');
 
-    return content.split('\n');
+    console.log('푸 답변', response);
+
+    // const content = await this.extractContentOnly(response, 'text');
+
+    return response.split('\n');
   }
 
   // Method to send chat request to the API

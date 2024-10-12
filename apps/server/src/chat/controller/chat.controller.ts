@@ -5,7 +5,7 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
-  Request,
+  Req,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { STTService } from '../service/STT.service';
@@ -14,6 +14,7 @@ import { UserService } from 'src/user/service/user.service';
 import { TTSService } from '../service/TTS.service';
 import { ChatDto } from '../dto/chat.dto';
 import { SendChatDto } from 'src/user/dto/user.dto';
+import { Request } from 'express';
 
 @Controller('chat')
 export class ChatController {
@@ -31,7 +32,7 @@ export class ChatController {
 
   @Post('sendChat')
   async sendChat(
-    @Request() req,
+    @Req() req: Request,
     @Body() chatDto: ChatDto,
   ): Promise<SendChatDto> {
     const sendChatDto = new SendChatDto();
@@ -39,8 +40,6 @@ export class ChatController {
     try {
       const accessToken = req.cookies['accessToken'];
       const refreshToken = req.cookies['refreshToken'];
-
-      console.log('sendChat 토큰 확인', accessToken, refreshToken);
 
       const authUser = await this.userService.authuser(
         accessToken,
@@ -51,14 +50,14 @@ export class ChatController {
 
       const getAnswerDto = await this.chatService.getAnswer(chatDto);
 
-      console.log('푸 답변', getAnswerDto.aiMsg);
+      console.log('푸 답변', getAnswerDto);
 
       await this.ttsService.callExternalApi(getAnswerDto.aiMsg);
 
       sendChatDto.Aimsg = getAnswerDto.aiMsg;
       sendChatDto.result = true;
       sendChatDto.userMsg = chatDto.messages.join(', ');
-      sendChatDto.emotion = getAnswerDto.emotion;
+      sendChatDto.emotion = getAnswerDto.emotion.split('\n')[0];
 
       if (!authUser.result) {
         return sendChatDto;

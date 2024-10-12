@@ -158,51 +158,59 @@ export class MissionService {
     accessToken: string,
     refreshToken: string,
   ): Promise<MissionDto[]> {
-    const authuserDto: AuthUserDto = await this.userService.authuser(
-      accessToken,
-      refreshToken,
-    );
-
-    if (!authuserDto.result) {
-      return [];
-    }
-
-    // user 찾기
-    const userId = authuserDto.userId;
-    const user = await this.userRepository.findByUserId(userId);
-
-    // 학습 true, 사용 false 미션 가져오기
-    const unusedMissions =
-      await this.missionRepository.findByUserIdAndCompleteAndLearn(
-        user,
-        false,
-        true,
+    try {
+      const authuserDto: AuthUserDto = await this.userService.authuser(
+        accessToken,
+        refreshToken,
       );
 
-    if (unusedMissions.length === 0) {
-      return [];
+      if (!authuserDto.result) {
+        return [];
+      }
+
+      // user 찾기
+      const userId = authuserDto.userId;
+      const user = await this.userRepository.findByUserId(userId);
+
+      console.log(user);
+
+      // 학습 true, 사용 false 미션 가져오기
+      const unusedMissions =
+        await this.missionRepository.findByUserIdAndCompleteAndLearn(
+          user,
+          false,
+          true,
+        );
+
+      console.log('안배운 미션 확인', unusedMissions);
+
+      if (unusedMissions.length === 0) {
+        return [];
+      }
+
+      // 랜덤 3 개
+      const shuffledMissions = unusedMissions.sort(() => 0.5 - Math.random());
+      const limitedUnusedMissions = shuffledMissions.slice(0, 3);
+
+      const result: MissionDto[] = [];
+
+      for (const limitedUnusedMission of limitedUnusedMissions) {
+        let userMissionDto: MissionDto;
+
+        userMissionDto.missionId = limitedUnusedMission.mission.missionId;
+        userMissionDto.mission = limitedUnusedMission.mission.mission;
+        userMissionDto.meaning = limitedUnusedMission.mission.meaning;
+        userMissionDto.complete = limitedUnusedMission.complete;
+
+        result.push(userMissionDto);
+      }
+
+      console.log('결과 확인', result);
+
+      return result;
+    } catch (e) {
+      console.error(e);
     }
-
-    // 랜덤 3 개
-    const shuffledMissions = unusedMissions.sort(() => 0.5 - Math.random());
-    const limitedUnusedMissions = shuffledMissions.slice(0, 3);
-
-    const result: MissionDto[] = [];
-
-    for (const limitedUnusedMission of limitedUnusedMissions) {
-      let userMissionDto: MissionDto;
-
-      userMissionDto.missionId = limitedUnusedMission.mission.missionId;
-      userMissionDto.mission = limitedUnusedMission.mission.mission;
-      userMissionDto.meaning = limitedUnusedMission.mission.meaning;
-      userMissionDto.complete = limitedUnusedMission.complete;
-
-      result.push(userMissionDto);
-    }
-
-    console.log('결과 확인', result);
-
-    return result;
   }
 
   // 채팅창 : 미션 문장 사용여부 판단 AI
