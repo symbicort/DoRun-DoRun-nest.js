@@ -403,7 +403,7 @@ function Talk() {
 			const formData = new FormData();
 
 			formData.append('audio', audioFile);
-			const response = await axios.post(`${API_URL}/chat/speech`, formData, {
+			const response = await axios.post('http://localhost:3050/chat/speech', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},

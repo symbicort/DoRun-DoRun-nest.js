@@ -13,3 +13,9 @@ export class MissionDto {
   @IsBoolean()
   complete: boolean;
 }
+
+export class getPracticeDto {
+  expression: string;
+  meaning: string;
+  level: number;
+}

@@ -38,7 +38,7 @@ export class ChatController {
 
     try {
       const accessToken = req.cookies['accessToken'];
-      const refreshToken = req.cookies['RefreshToken'];
+      const refreshToken = req.cookies['refreshToken'];
 
       console.log('sendChat 토큰 확인', accessToken, refreshToken);
 

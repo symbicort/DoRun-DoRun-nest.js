@@ -27,7 +27,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       password: process.env.MYSQL_PASSWORD,
       database: process.env.MYSQL_DATABASE,
       // entities: [UserMissionEntity, User, MissionEntity],
-      synchronize: false,
+      synchronize: true,
       autoLoadEntities: true,
       timezone: '+09:00',
       logging: false,

@@ -52,8 +52,12 @@ export class MissionRepository {
 
     return await this.userMissionRepository.find({
       where: {
-        user: user, // User 객체 사용
-        mission: In(missions),
+        user: {
+          userId: user.userId,
+        },
+        mission: {
+          missionId: In(missions),
+        },
       },
     });
   }
@@ -72,17 +76,20 @@ export class MissionRepository {
     });
   }
 
-  async findByUserIdAndLearnAndMissionId_Course(
+  async findByUserIdAndUnLearnAndMissionId_Course(
     user: User,
     learn: boolean,
     course: string,
   ): Promise<UserMissionEntity[]> {
     return await this.userMissionRepository.find({
+      relations: ['mission'],
       where: {
-        user: user, // User 객체 사용
+        user: {
+          userId: user.userId,
+        }, // User 객체 사용
         learn: learn,
         mission: {
-          course: course, // MissionEntity의 course에 접근
+          course: course,
         },
       },
     });

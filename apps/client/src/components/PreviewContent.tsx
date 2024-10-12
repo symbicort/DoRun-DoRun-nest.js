@@ -48,6 +48,7 @@ export default function PreviewContent() {
           withCredentials: true
         },
       );
+      
       if (!response.data) {
         if (
           confirm(
@@ -71,16 +72,22 @@ export default function PreviewContent() {
       const response = await axios.get(
         // 배포 시 URL 설정
         // 'https://43.203.227.36.sslip.io/server/getPractice',
-        'http://localhost:3050/getPractice',
+        'http://localhost:3050/practice',
         {
           params: {
             expression: sentence.mission,
             meaning: sentence.meaning,
-            level: Number(sentence.missionId.split('_')[0].substring(2)),
+            // 레벨 관련 에러 발생(JAVA 백엔드와 데이터 다른것으로 예상)
+            // level: Number(sentence.missionId.split('_')[0].substring(2)),
+            level: Number(urlID![5]),
             
-          },withCredentials: true
+          },
+          withCredentials: true
         }
       );
+
+      console.log(response)
+
       setSelectedSentenceData(response.data);
     } catch (error) {
       console.error('getAiExample 받기 실패', error);

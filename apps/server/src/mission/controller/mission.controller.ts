@@ -24,7 +24,7 @@ export class MissionController {
   @Post('course')
   async addUserMissionsForCourse(@Req() req: Request): Promise<void> {
     const accessToken = req.cookies['accessToken'];
-    const refreshToken = req.cookies['RefreshToken'];
+    const refreshToken = req.cookies['refreshToken'];
     const { course } = req.body;
 
     console.log('course 생성', course);
@@ -42,7 +42,9 @@ export class MissionController {
     @Req() req: Request,
   ): Promise<MissionDto[]> {
     const accessToken = req.cookies['accessToken'];
-    const refreshToken = req.cookies['RefreshToken'];
+    const refreshToken = req.cookies['refreshToken'];
+
+    console.log('토큰 받음', accessToken, refreshToken, course);
 
     return await this.missionService.getUnLearnMissionsForUser(
       course,
@@ -58,7 +60,7 @@ export class MissionController {
   ): Promise<void> {
     const { mission_id } = request;
     const accessToken = req.cookies['accessToken'];
-    const refreshToken = req.cookies['RefreshToken'];
+    const refreshToken = req.cookies['refreshToken'];
 
     await this.missionService.setLearnMissionsForUser(
       accessToken,
@@ -95,7 +97,7 @@ export class MissionController {
     try {
       const { missionId } = request;
       const accessToken = req.cookies['accessToken'];
-      const refreshToken = req.cookies['RefreshToken'];
+      const refreshToken = req.cookies['refreshToken'];
 
       await this.missionService.setMissionCompleteForUser(
         accessToken,
@@ -111,7 +113,7 @@ export class MissionController {
     }
   }
 
-  @Get('getPractice')
+  @Get('practice')
   async getPractice(
     @Query('expression') expression: string,
     @Query('meaning') meaning: string,
@@ -119,17 +121,15 @@ export class MissionController {
     @Res() res: Response,
   ) {
     try {
-      const responseBody = await this.practiceService.getPractice(
+      const result = await this.practiceService.getPractice(
         expression,
         meaning,
         level,
       );
-      return res.status(HttpStatus.OK).json(responseBody);
+
+      res.status(201).send(result);
     } catch (error) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        message: 'An error occurred while fetching practice data.',
-        error: error.message,
-      });
+      console.log(error.message);
     }
   }
 }

@@ -47,7 +47,7 @@ export class RoomController {
   ): Promise<Response> {
     try {
       const accessToken = req.cookies['accessToken'];
-      const refreshToken = req.cookies['RefreshToken'];
+      const refreshToken = req.cookies['refreshToken'];
 
       const authUser: AuthUserDto = await this.userService.authuser(
         accessToken,

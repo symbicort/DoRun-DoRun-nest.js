@@ -37,8 +37,6 @@ export class MissionService {
       const courseMission: MissionEntity[] =
         await this.missionRepository.findByCourse(course);
 
-      console.log('미션 테이블 확인', courseMission);
-
       // user 찾기
       const userId = authuserDto.userId;
       const user = await this.userRepository.findByUserId(userId);
@@ -51,7 +49,8 @@ export class MissionService {
         );
 
       if (existingMissions.length > 0) {
-        return; // 이미 해당 코스에 대한 미션 데이터가 있으면 더 이상 진행하지 않음
+        // 이미 해당 코스에 대한 미션 데이터가 있으면 더 이상 진행하지 않음
+        return;
       }
 
       for (const mission of courseMission) {
@@ -88,7 +87,7 @@ export class MissionService {
 
     // 학습 false 미션 가져오기
     const unLearnMissions =
-      await this.missionRepository.findByUserIdAndLearnAndMissionId_Course(
+      await this.missionRepository.findByUserIdAndUnLearnAndMissionId_Course(
         user,
         false,
         course,
@@ -105,7 +104,7 @@ export class MissionService {
     const result: MissionDto[] = [];
 
     for (const limitedUnlearnMission of limitedUnlearnMissions) {
-      let userMissionDto: MissionDto;
+      const userMissionDto = new MissionDto();
 
       userMissionDto.missionId = limitedUnlearnMission.mission.missionId;
       userMissionDto.mission = limitedUnlearnMission.mission.mission;
