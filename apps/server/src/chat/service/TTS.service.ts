@@ -38,8 +38,6 @@ export class TTSService {
         },
       );
 
-      console.log('오디오 스트림만 되면 될듯', audioStream);
-
       await writeFile(this.LOCAL_PATH, audioStream, {
         encoding: 'binary',
       });

@@ -19,3 +19,8 @@ export class getPracticeDto {
   meaning: string;
   level: number;
 }
+
+export class checkMissionDto {
+  missions: string[];
+  chat: string;
+}

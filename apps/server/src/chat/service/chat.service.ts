@@ -3,6 +3,7 @@ import { VertexAI, GenerativeModelPreview } from '@google-cloud/vertexai';
 import { ChatDto } from '../dto/chat.dto';
 import { CorrectContext } from 'src/constants/correct-context';
 import { Pooh } from 'src/constants/pooh-context';
+import { request } from 'http';
 
 @Injectable()
 export class ChatService {
@@ -65,20 +66,31 @@ export class ChatService {
 
   // API to get text correction
   async getCorrection(chatDto: ChatDto): Promise<string[]> {
-    const messages = chatDto.messages;
-    const stringifiedMessages = this.stringifyMessage(messages);
+    const stringifiedMessages = this.stringifyMessage(chatDto.messages);
 
     const request_message = {
-      content: CorrectContext + stringifiedMessages,
+      content: CorrectContext.context + stringifiedMessages,
     };
 
     const response = await this.sendTextRequest(request_message);
 
-    console.log('푸 답변', response);
+    console.log(
+      '교정 답변',
+      response.candidates[0].content.parts[0].text,
+      '끝',
+    );
 
-    // const content = await this.extractContentOnly(response, 'text');
+    const content = response.candidates[0].content.parts[0].text.split('\n');
 
-    return response.split('\n');
+    for (let i = 0; i < content.length; i++) {
+      console.log(content[i]);
+      if (content[i] == '' || content[i] == undefined) {
+        console.log('공백 데이터');
+        content.pop();
+      }
+    }
+
+    return content;
   }
 
   // Method to send chat request to the API

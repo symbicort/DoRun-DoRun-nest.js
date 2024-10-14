@@ -25,37 +25,44 @@ export class MessageService {
   }
 
   async addMessagesByRoomId(room: Room, messages: string[]): Promise<void> {
-    for (const message of messages) {
-      const temp = new this.messageModel();
-      temp.roomid = room._id.toString();
-      temp.userid = room.userid;
-      temp.ai = room.ai;
+    try {
+      console.log('message data', messages);
+      for (const message of messages) {
+        const temp = new this.messageModel();
+        temp.roomid = room._id.toString();
+        temp.userid = room.userid;
+        temp.ai = room.ai;
 
-      const content = message.split(': ');
+        const content = message.split(': ');
 
-      if (content[0].includes('user')) {
-        // 유저면
-        temp.userSpeaking = true;
+        console.log('모델 데이터', temp, '메시지 데이터', content);
 
-        if (content[1].includes('->')) {
-          // 교정받은거
-          temp.grammarValid = false;
-          const two = content[1].split('->');
-          temp.content = two[0].trim();
-          temp.correctedContent = two[1].trim();
+        if (content[0].includes('user')) {
+          // 유저면
+          temp.userSpeaking = true;
+
+          if (content[1].includes('->')) {
+            // 교정받은거
+            temp.grammarValid = false;
+            const two = content[1].split('->');
+            temp.content = two[0].trim();
+            temp.correctedContent = two[1].trim();
+          } else {
+            // 교정 안받은거
+            temp.grammarValid = true;
+            temp.content = content[1].trim();
+          }
         } else {
-          // 교정 안받은거
-          temp.grammarValid = true;
+          // ai면
+          temp.userSpeaking = false;
           temp.content = content[1].trim();
+          temp.grammarValid = true;
         }
-      } else {
-        // ai면
-        temp.userSpeaking = false;
-        temp.content = content[1].trim();
-        temp.grammarValid = true;
-      }
 
-      await temp.save(); // 각 메시지를 저장할 때까지 기다림
+        await this.chatRepository.newMessage(temp);
+      }
+    } catch (err) {
+      console.error(err);
     }
   }
 }

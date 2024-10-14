@@ -201,10 +201,11 @@ function Talk() {
 				chat: inputText,
 			}, {withCredentials: true});
 			const checkData = response.data;
+			console.log("checkMission Data", checkData, "chk")
 
 			// 백엔드에서 배열로 데이터를 전송하도록 AI 프롬프팅을 했지만 배열 모양으로만 보내는 경우가 있어
 			// 데이터가 배열인지 확인하고 아닐 경우 배열로 변환
-			if (Array.isArray(checkData)) {
+			if (!checkData ||Array.isArray(checkData)) {
 				// console.log('data는 배열입니다.');
 			} else {
 				// console.log('data는 배열이 아닙니다.');
@@ -284,6 +285,7 @@ function Talk() {
 				{ withCredentials: true }
 			);
 			const correctedMsg = await resCorrect.data;
+			console.log("교정 받은 데이터", correctedMsg)
 			correctedMsg.forEach(function (msg: string) {
 				if (msg.includes('->')) {
 					setCorrectList((prevData) => [...prevData, msg]);
@@ -298,6 +300,7 @@ function Talk() {
 			setCorrectLoad(false);
 
 			if (authuser.result) {//로그인된 유저일때
+				console.log("교정 데이터",correctedMsg)
         //방생성
 				await axios
 					.post(

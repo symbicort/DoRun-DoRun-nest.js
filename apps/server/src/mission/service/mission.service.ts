@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PredictionServiceClient } from '@google-cloud/aiplatform';
-import { Value } from 'google-protobuf';
+// import { Value } from '@google-cloud/aiplatform/build/protos/google/protobuf/struct_pb';
 import * as fs from 'fs';
 import { UserRepository } from 'src/user/repository/user.repository';
 import { MissionRepository } from '../repository/mission.repository';
@@ -12,11 +12,19 @@ import { MissionEntity } from '../entity/mission.entity';
 
 @Injectable()
 export class MissionService {
+  private readonly client: PredictionServiceClient;
   constructor(
     private readonly userRepository: UserRepository,
     private readonly missionRepository: MissionRepository,
     private readonly userService: UserService,
-  ) {}
+  ) {
+    this.client = new PredictionServiceClient({
+      projectId: 'stately-fabric-435204-t1',
+      // 배포 시 243번째 줄 경로로 수정
+      keyFilename:
+        '/Users/jeongwon/DoRun-DoRun-nest.js/apps/server/application_default_credentials.json',
+    });
+  }
 
   // 학습하기 : course 선택 -> user_mission 테이블에 데이터 추가
   async addUserMissionsForCourse(
@@ -216,7 +224,7 @@ export class MissionService {
   // 채팅창 : 미션 문장 사용여부 판단 AI
   // https://cloud.google.com/vertex-ai/docs/start/client-libraries?hl=ko
   async textPrompt(data: string): Promise<string> {
-    const prompt = this.makePrompt(data);
+    const prompt = await this.makePrompt(data);
     const instance = `{ "prompt": "Check which expression from the missions the chat corresponds to and return the corresponding missionId(s) as an Array. (e.g. ['lv1_1', 'lv_2']) If no matching missions are found or if the chat sentence does not match the expression from any of the missions, return none in lower case.${prompt}"}`;
     const parameters =
       '{\n' +
@@ -227,8 +235,6 @@ export class MissionService {
       '}';
     const project = 'stately-fabric-435204-t1';
     const location = 'asia-northeast3';
-    const publisher = 'google';
-    const model = 'text-bison@002';
 
     // 인증 파일의 경로
     // const credentialsPath =
@@ -243,13 +249,10 @@ export class MissionService {
       parameters,
       project,
       location,
-      publisher,
-      model,
-      credentialsPath,
     );
   }
 
-  makePrompt(data: string): string {
+  async makePrompt(data: string): Promise<string> {
     try {
       const jsonData = JSON.parse(data);
       let prompt = '';
@@ -270,39 +273,36 @@ export class MissionService {
     parameters: string,
     project: string,
     location: string,
-    publisher: string,
-    model: string,
-    credentialsPath: string,
   ): Promise<string> {
-    const credentials = JSON.parse(fs.readFileSync(credentialsPath, 'utf-8'));
-    const predictionServiceClient = new PredictionServiceClient({
-      apiEndpoint: `${location}-aiplatform.googleapis.com`,
-      credentials,
-    });
+    try {
+      console.log('value.json', instance);
 
-    const endpointName = `projects/${project}/locations/${location}/publishers/${publisher}/models/${model}`;
+      const endpointName = `projects/${project}/locations/${location}/publishers/google/models/text-bison@002`;
 
-    const instanceValue = Value.fromJson(instance);
-    const instances = [instanceValue];
+      const instanceValue = JSON.parse(instance);
+      const instances = [instanceValue];
 
-    const parameterValue = Value.fromJson(parameters);
+      const parameterValue = JSON.parse(parameters);
 
-    const [response] = await predictionServiceClient.predict({
-      endpoint: endpointName,
-      instances,
-      parameters: parameterValue,
-    });
+      const [response] = await this.client.predict({
+        endpoint: endpointName,
+        instances,
+        parameters: parameterValue,
+      });
 
-    for (const prediction of response.predictions) {
-      if (prediction.structValue) {
-        const predictionMap = prediction.structValue.fields;
-        if (predictionMap.content) {
-          return predictionMap.content.stringValue;
+      for (const prediction of response.predictions) {
+        if (prediction.structValue) {
+          const predictionMap = prediction.structValue.fields;
+          if (predictionMap.content) {
+            return predictionMap.content.stringValue;
+          }
         }
       }
-    }
 
-    return null;
+      return null;
+    } catch (err) {
+      console.error('predictTextPrompt', err);
+    }
   }
 
   // 채팅창 : 미션 완료(대화 종료)

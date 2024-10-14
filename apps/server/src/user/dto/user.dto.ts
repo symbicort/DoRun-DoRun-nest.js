@@ -115,7 +115,7 @@ export class SendChatDto {
   userMsg: string;
 
   @IsString()
-  Aimsg: string;
+  aimsg: string;
 
   @IsBoolean()
   result: boolean;

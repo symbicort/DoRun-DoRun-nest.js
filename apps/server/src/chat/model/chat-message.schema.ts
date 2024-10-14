@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
+import * as moment from 'moment-timezone';
 
 export type MessageDocument = HydratedDocument<Message>;
 
 @Schema({ collection: 'messages', timestamps: true })
 export class Message {
-  @Prop({ type: Types.ObjectId })
   _id: Types.ObjectId;
 
   @Prop({ required: true })
@@ -29,7 +29,7 @@ export class Message {
   @Prop()
   correctedContent?: string;
 
-  @Prop({ default: Date.now })
+  @Prop({ default: () => moment.tz(Date.now(), 'Asia/Seoul').toDate() })
   createdAt: Date;
 }
 

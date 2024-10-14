@@ -13,6 +13,11 @@ export class ChatRepository {
     @InjectModel(Room.name) private roomModel: Model<RoomDocument>,
   ) {}
 
+  async newMessage(message: Message): Promise<Message> {
+    const newMessage = new this.messageModel(message);
+    return newMessage.save();
+  }
+
   async findRoomId(roomid: string): Promise<MessageDto[]> {
     const messages = await this.messageModel.find({ roomid }).exec();
 

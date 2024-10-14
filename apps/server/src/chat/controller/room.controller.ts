@@ -46,6 +46,8 @@ export class RoomController {
     @Res() res: Response,
   ): Promise<Response> {
     try {
+      console.log('room data', room);
+
       const accessToken = req.cookies['accessToken'];
       const refreshToken = req.cookies['refreshToken'];
 
@@ -55,7 +57,9 @@ export class RoomController {
       );
       room.userid = authUser.userId;
       const newRoom: Room = await this.roomService.newRoom(room);
-      await this.messageService.addMessagesByRoomId(room, room.messages);
+
+      console.log('생성된 룸 확인', newRoom);
+      await this.messageService.addMessagesByRoomId(newRoom, room.messages);
       return res.json({ id: newRoom._id });
     } catch (error) {
       console.error(error);

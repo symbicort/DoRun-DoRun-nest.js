@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { MissionService } from '../service/mission.service';
 import { Request, Response } from 'express';
-import { MissionDto } from '../dto/mission.dto';
+import { checkMissionDto, MissionDto } from '../dto/mission.dto';
 import { PracticeService } from '../service/practice.service';
 
 @Controller()
@@ -83,9 +83,14 @@ export class MissionController {
   }
 
   @Post('checkMission')
-  async checkMission(@Body() postData: string): Promise<string> {
-    console.log('Received data from client:', postData);
-    const response = await this.missionService.textPrompt(postData);
+  async checkMission(@Body() postData: checkMissionDto): Promise<string> {
+    console.log('Received data from client:', postData.missions.length);
+    if (postData.missions.length === 0) {
+      return;
+    }
+    const response = await this.missionService.textPrompt(
+      JSON.stringify(postData),
+    );
     return response;
   }
 

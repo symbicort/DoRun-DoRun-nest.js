@@ -50,11 +50,9 @@ export class ChatController {
 
       const getAnswerDto = await this.chatService.getAnswer(chatDto);
 
-      console.log('푸 답변', getAnswerDto);
-
       await this.ttsService.callExternalApi(getAnswerDto.aiMsg);
 
-      sendChatDto.Aimsg = getAnswerDto.aiMsg;
+      sendChatDto.aimsg = getAnswerDto.aiMsg;
       sendChatDto.result = true;
       sendChatDto.userMsg = chatDto.messages.join(', ');
       sendChatDto.emotion = getAnswerDto.emotion.split('\n')[0];

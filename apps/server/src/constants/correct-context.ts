@@ -1,5 +1,5 @@
 export class CorrectContext {
-  context: string = `
+  static context: string = `
         From now on, I will give you a conversation.
         Read them and return every sentence back to me, containing who is saying the sentence like 'user :' or 'pooh : '.
         Among those begin with 'user', if there is a grammar error, 
@@ -22,6 +22,5 @@ export class CorrectContext {
         And don't mind marks. Just focus on letters. Don't need to change 'Good!' into 'Good.'
         If you find critical grammar error, then you correct it.
         Remember that if you don't find grammar error from user's sentence, just leave it. 
-        But if you find no grammar error among user's sentences, return 'Perfect Grammar' only.
-    `;
+        But if you find no grammar error among user's sentences, return 'Perfect Grammar' only.Lastly, never leave any blank messages after your answer really never`;
 }
