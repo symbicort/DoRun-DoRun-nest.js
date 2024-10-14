@@ -74,21 +74,9 @@ export class ChatService {
 
     const response = await this.sendTextRequest(request_message);
 
-    console.log(
-      '교정 답변',
-      response.candidates[0].content.parts[0].text,
-      '끝',
-    );
-
     const content = response.candidates[0].content.parts[0].text.split('\n');
 
-    for (let i = 0; i < content.length; i++) {
-      console.log(content[i]);
-      if (content[i] == '' || content[i] == undefined) {
-        console.log('공백 데이터');
-        content.pop();
-      }
-    }
+    content.pop();
 
     return content;
   }

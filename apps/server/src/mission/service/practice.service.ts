@@ -28,14 +28,7 @@ export class PracticeService {
 
       const response = await this.chatService.sendTextRequest(requestBody); // ai 의 답변 받음
 
-      console.log('예문 답변', response.candidates[0].content.parts[0].text);
-
       const example = response.candidates[0].content.parts[0].text;
-
-      // const result = await this.chatService.extractContentOnly(
-      //   response,
-      //   'text',
-      // ); // 답변중 필요한 내용만 추출
 
       const result = await this.makeCustomizedJsonForm(
         example,
@@ -43,6 +36,8 @@ export class PracticeService {
         meaning,
         level,
       );
+
+      console.log('get practice 리턴', result);
 
       return result;
     } catch (e) {

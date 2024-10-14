@@ -285,7 +285,6 @@ function Talk() {
 				{ withCredentials: true }
 			);
 			const correctedMsg = await resCorrect.data;
-			console.log("교정 받은 데이터", correctedMsg)
 			correctedMsg.forEach(function (msg: string) {
 				if (msg.includes('->')) {
 					setCorrectList((prevData) => [...prevData, msg]);
@@ -300,7 +299,6 @@ function Talk() {
 			setCorrectLoad(false);
 
 			if (authuser.result) {//로그인된 유저일때
-				console.log("교정 데이터",correctedMsg)
         //방생성
 				await axios
 					.post(

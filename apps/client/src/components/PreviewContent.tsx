@@ -69,24 +69,36 @@ export default function PreviewContent() {
   async function getAiExample(sentence: Sentence) {
     try {
       setIsLoading(true);
+      // const response = await axios.get(
+      //   // 배포 시 URL 설정
+      //   // 'https://43.203.227.36.sslip.io/server/getPractice',
+      //   'http://localhost:3050/practice',
+      //   {
+      //     params: {
+      //       expression: sentence.mission,
+      //       meaning: sentence.meaning,
+      //       level: Number(urlID![5]),
+      //     },
+      //     withCredentials: true
+      //   }
+      // );
+
       const response = await axios.get(
-        // 배포 시 URL 설정
-        // 'https://43.203.227.36.sslip.io/server/getPractice',
+        // 배포 시 URL 재설정
+        // 'https://43.203.227.36.sslip.io/server/learn',
         'http://localhost:3050/practice',
         {
+          withCredentials: true,
           params: {
             expression: sentence.mission,
             meaning: sentence.meaning,
-            // 레벨 관련 에러 발생(JAVA 백엔드와 데이터 다른것으로 예상)
-            // level: Number(sentence.missionId.split('_')[0].substring(2)),
             level: Number(urlID![5]),
-            
           },
-          withCredentials: true
-        }
+          
+        },
       );
 
-      console.log(response)
+      console.log("practice api ", response)
 
       setSelectedSentenceData(response.data);
     } catch (error) {

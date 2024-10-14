@@ -27,8 +27,6 @@ export class MissionController {
     const refreshToken = req.cookies['refreshToken'];
     const { course } = req.body;
 
-    console.log('course 생성', course);
-
     await this.missionService.addUserMissionsForCourse(
       course,
       accessToken,
@@ -123,16 +121,9 @@ export class MissionController {
     @Query('expression') expression: string,
     @Query('meaning') meaning: string,
     @Query('level') level: number,
-    @Res() res: Response,
   ) {
     try {
-      const result = await this.practiceService.getPractice(
-        expression,
-        meaning,
-        level,
-      );
-
-      res.status(201).send(result);
+      return await this.practiceService.getPractice(expression, meaning, level);
     } catch (error) {
       console.log(error.message);
     }
