@@ -75,6 +75,7 @@ export class MissionRepository {
         complete: complete,
         learn: learn,
       },
+      relations: ['mission'],
     });
   }
 
@@ -104,8 +105,12 @@ export class MissionRepository {
   ): Promise<UserMissionEntity> {
     return await this.userMissionRepository.findOne({
       where: {
-        user: user, // User 객체 사용
-        mission: mission, // MissionEntity 객체 사용
+        user: {
+          userId: user.userId,
+        },
+        mission: {
+          missionId: mission.missionId,
+        },
         learn: learn,
       },
     });

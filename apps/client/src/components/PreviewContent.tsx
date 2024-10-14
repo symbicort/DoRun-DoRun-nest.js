@@ -85,7 +85,7 @@ export default function PreviewContent() {
 
       const response = await axios.get(
         // 배포 시 URL 재설정
-        // 'https://43.203.227.36.sslip.io/server/learn',
+        // 'https://43.203.227.36.sslip.io/server/practice',
         'http://localhost:3050/practice',
         {
           withCredentials: true,
@@ -98,7 +98,7 @@ export default function PreviewContent() {
         },
       );
 
-      console.log("practice api ", response)
+      console.log("practice api response", response)
 
       setSelectedSentenceData(response.data);
     } catch (error) {
@@ -131,7 +131,7 @@ export default function PreviewContent() {
         'http://localhost:3050/learned',
         {
         mission_id: sentences[index].missionId,
-      });
+      },{ withCredentials: true });
 
       const updatedSentences = [...sentences];
       updatedSentences[index] = {

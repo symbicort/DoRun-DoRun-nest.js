@@ -130,35 +130,43 @@ export class MissionService {
     refreshToken: string,
     missionId: number,
   ): Promise<void> {
-    const authuserDto: AuthUserDto = await this.userService.authuser(
-      accessToken,
-      refreshToken,
-    );
-    if (!authuserDto.result) {
-      return;
-    }
-
-    // user 찾기
-    const userId = authuserDto.userId;
-    const user = await this.userRepository.findByUserId(userId);
-
-    // missionId 찾기
-    const mission = await this.missionRepository.findByMissionId(missionId);
-
-    // 해당 미션 데이터 찾기
-    const userMission =
-      await this.missionRepository.findByUserIdAndMissionIdAndLearn(
-        user,
-        mission,
-        false,
+    try {
+      const authuserDto: AuthUserDto = await this.userService.authuser(
+        accessToken,
+        refreshToken,
       );
+      if (!authuserDto.result) {
+        return;
+      }
 
-    if (!userMission) {
-      console.log('학습 정보와 일치하는 유저 데이터가 없습니다.');
-      return;
+      // user 찾기
+      const userId = authuserDto.userId;
+      const user = await this.userRepository.findByUserId(userId);
+
+      // missionId 찾기
+      const mission = await this.missionRepository.findByMissionId(missionId);
+
+      console.log('검색 조건', user, mission);
+
+      // 해당 미션 데이터 찾기
+      const userMission =
+        await this.missionRepository.findByUserIdAndMissionIdAndLearn(
+          user,
+          mission,
+          false,
+        );
+
+      console.log('미션 데이터 find 결과', userMission);
+
+      if (!userMission) {
+        console.log('학습 정보와 일치하는 유저 데이터가 없습니다.');
+        return;
+      }
+      userMission.learn = true;
+      await this.missionRepository.saveUserMission(userMission);
+    } catch (e) {
+      console.error(e);
     }
-    userMission.learn = true;
-    await this.missionRepository.saveUserMission(userMission);
   }
 
   // 채팅창 : 프론트로 문장 전송
@@ -190,7 +198,7 @@ export class MissionService {
           true,
         );
 
-      console.log('안배운 미션 확인', unusedMissions);
+      console.log('안배운 미션 확인', unusedMissions[0].mission.missionId);
 
       if (unusedMissions.length === 0) {
         return [];
@@ -203,7 +211,7 @@ export class MissionService {
       const result: MissionDto[] = [];
 
       for (const limitedUnusedMission of limitedUnusedMissions) {
-        let userMissionDto: MissionDto;
+        const userMissionDto = new MissionDto();
 
         userMissionDto.missionId = limitedUnusedMission.mission.missionId;
         userMissionDto.mission = limitedUnusedMission.mission.mission;

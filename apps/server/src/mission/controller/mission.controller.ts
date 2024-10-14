@@ -60,6 +60,8 @@ export class MissionController {
     const accessToken = req.cookies['accessToken'];
     const refreshToken = req.cookies['refreshToken'];
 
+    console.log('learned API REQ', mission_id, accessToken, refreshToken);
+
     await this.missionService.setLearnMissionsForUser(
       accessToken,
       refreshToken,
@@ -125,7 +127,7 @@ export class MissionController {
     try {
       return await this.practiceService.getPractice(expression, meaning, level);
     } catch (error) {
-      console.log(error.message);
+      console.error(error);
     }
   }
 }

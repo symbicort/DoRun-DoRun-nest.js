@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ChatService } from 'src/chat/service/chat.service';
 import { PracticeContext } from 'src/constants/practice-context';
 import { randomInt } from 'crypto';
+import { getPracticeResDto } from 'src/mission/dto/mission.dto';
 
 @Injectable()
 export class PracticeService {
@@ -14,7 +15,7 @@ export class PracticeService {
     expression: string,
     meaning: string,
     level: number,
-  ): Promise<Map<string, any>> {
+  ): Promise<getPracticeResDto> {
     try {
       const topic = this.pickTopic();
       const requestBody = JSON.stringify({
@@ -30,16 +31,12 @@ export class PracticeService {
 
       const example = response.candidates[0].content.parts[0].text;
 
-      const result = await this.makeCustomizedJsonForm(
+      return await this.makeCustomizedJsonForm(
         example,
         expression,
         meaning,
         level,
       );
-
-      console.log('get practice 리턴', result);
-
-      return result;
     } catch (e) {
       console.error(e);
     }
@@ -50,14 +47,14 @@ export class PracticeService {
     expression: string,
     meaning: string,
     level: number,
-  ): Promise<Map<string, any>> {
+  ): Promise<getPracticeResDto> {
     try {
       const resultSplit = example.split(',, ');
-      const responseBody = new Map<string, any>();
-      responseBody.set('id', `level${level}`);
-      responseBody.set('no', level);
-      responseBody.set('sentence', `(레벨${level})${expression}`);
-      responseBody.set('sentence_translation', meaning);
+      const responseBody = new getPracticeResDto();
+      responseBody.id = `level${level}`;
+      responseBody.no = level;
+      responseBody.sentence = `(레벨${level})${expression}`;
+      responseBody.sentence_translation = meaning;
 
       // 예시 문장 3개
       const similars = new Array(3);
@@ -67,8 +64,8 @@ export class PracticeService {
         similars[i] = temp[0];
         similars_trans[i] = temp[1].slice(0, -1); // 제일 뒤에 '(' 뺌
       }
-      responseBody.set('similar', similars);
-      responseBody.set('similar_translation', similars_trans);
+      responseBody.similar = similars;
+      responseBody.similar_translation = similars_trans;
 
       // 대화 2개
       const dialogue = new Array(2);
@@ -80,9 +77,9 @@ export class PracticeService {
       temp = resultSplit[4].split('(');
       dialogue[1] = temp[0];
       dialogue_translation[1] = `B: ${temp[1].slice(0, -1)}`;
-      responseBody.set('dialogue', dialogue);
-      responseBody.set('dialogue_translation', dialogue_translation);
-      responseBody.set('used', false);
+      responseBody.dialogue = dialogue;
+      responseBody.dialogue_translation = dialogue_translation;
+      responseBody.used = false;
 
       return responseBody;
     } catch (e) {
