@@ -6,6 +6,7 @@ import { UserRepository } from 'src/user/repository/user.repository';
 import { MissionRepository } from '../repository/mission.repository';
 import { UserMissionEntity } from '../entity/userMission.entity';
 import { UserService } from 'src/user/service/user.service';
+import { ChatService } from 'src/chat/service/chat.service';
 import { AuthUserDto } from 'src/user/dto/user.dto';
 import { MissionDto } from '../dto/mission.dto';
 import { MissionEntity } from '../entity/mission.entity';
@@ -17,6 +18,7 @@ export class MissionService {
     private readonly userRepository: UserRepository,
     private readonly missionRepository: MissionRepository,
     private readonly userService: UserService,
+    private readonly chatService: ChatService,
   ) {
     this.client = new PredictionServiceClient({
       projectId: 'stately-fabric-435204-t1',
@@ -188,8 +190,6 @@ export class MissionService {
       const userId = authuserDto.userId;
       const user = await this.userRepository.findByUserId(userId);
 
-      console.log(user);
-
       // 학습 true, 사용 false 미션 가져오기
       const unusedMissions =
         await this.missionRepository.findByUserIdAndCompleteAndLearn(
@@ -221,8 +221,6 @@ export class MissionService {
         result.push(userMissionDto);
       }
 
-      console.log('결과 확인', result);
-
       return result;
     } catch (e) {
       console.error(e);
@@ -233,7 +231,7 @@ export class MissionService {
   // https://cloud.google.com/vertex-ai/docs/start/client-libraries?hl=ko
   async textPrompt(data: string): Promise<string> {
     const prompt = await this.makePrompt(data);
-    const instance = `{ "prompt": "Check which expression from the missions the chat corresponds to and return the corresponding missionId(s) as an Array. (e.g. ['lv1_1', 'lv_2']) If no matching missions are found or if the chat sentence does not match the expression from any of the missions, return none in lower case.${prompt}"}`;
+    const request_message = `{ "prompt": "Check which expression from the missions the chat corresponds to and return the corresponding missionId(s) as an Array. (e.g. ['lv1_1', 'lv_2']) If no matching missions are found or if the chat sentence does not match the expression from any of the missions, return none in lower case.",${prompt}}`;
     const parameters =
       '{\n' +
       '  "temperature": 0.2,\n' +
@@ -252,12 +250,9 @@ export class MissionService {
     const credentialsPath =
       '/Users/jeongwon/DoRun-DoRun-nest.js/apps/server/application_default_credentials.json';
 
-    return await this.predictTextPrompt(
-      instance,
-      parameters,
-      project,
-      location,
-    );
+    const response = await this.chatService.sendTextRequest(request_message);
+
+    return response.candidates[0].content.parts[0].text;
   }
 
   async makePrompt(data: string): Promise<string> {
@@ -265,10 +260,10 @@ export class MissionService {
       const jsonData = JSON.parse(data);
       let prompt = '';
       for (const mission of jsonData.missions) {
-        prompt += `missionId: ${mission.missionId}\n`;
-        prompt += `mission: ${mission.mission}\n\n`;
+        prompt += `"missionId": ${mission.missionId}\n,`;
+        prompt += `"mission": "${mission.mission}"\n\n,`;
       }
-      prompt += `chat: ${jsonData.chat}`;
+      prompt += `"chat": "${jsonData.chat}"`;
       return prompt;
     } catch (e) {
       console.error(e);
@@ -277,35 +272,42 @@ export class MissionService {
   }
 
   async predictTextPrompt(
-    instance: string,
+    request_message: string,
     parameters: string,
     project: string,
     location: string,
   ): Promise<string> {
     try {
-      console.log('value.json', instance);
+      console.log('value.json', request_message, typeof request_message);
 
       const endpointName = `projects/${project}/locations/${location}/publishers/google/models/text-bison@002`;
 
-      const instanceValue = JSON.parse(instance);
-      const instances = [instanceValue];
+      const check = await this.chatService.sendTextRequest(request_message);
 
-      const parameterValue = JSON.parse(parameters);
+      console.log(
+        '미션 성공 여부 방법 변경',
+        check.candidates[0].content.parts[0].text,
+      );
 
-      const [response] = await this.client.predict({
-        endpoint: endpointName,
-        instances,
-        parameters: parameterValue,
-      });
+      // const instanceValue = JSON.parse(instance);
+      // const instances = [instanceValue];
 
-      for (const prediction of response.predictions) {
-        if (prediction.structValue) {
-          const predictionMap = prediction.structValue.fields;
-          if (predictionMap.content) {
-            return predictionMap.content.stringValue;
-          }
-        }
-      }
+      // const parameterValue = JSON.parse(parameters);
+
+      // const [response] = await this.client.predict({
+      //   endpoint: endpointName,
+      //   instances,
+      //   parameters: parameterValue,
+      // });
+
+      // for (const prediction of response.predictions) {
+      //   if (prediction.structValue) {
+      //     const predictionMap = prediction.structValue.fields;
+      //     if (predictionMap.content) {
+      //       return predictionMap.content.stringValue;
+      //     }
+      //   }
+      // }
 
       return null;
     } catch (err) {

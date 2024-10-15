@@ -14,8 +14,17 @@ import { PracticeContext } from 'src/constants/practice-context';
 
 @Module({
   controllers: [MissionController],
-  providers: [MissionService, PracticeService, MissionRepository, PracticeContext],
-  imports: [TypeOrmModule.forFeature([MissionEntity, UserMissionEntity]), UserModule, ChatModule],
-  exports: [MissionService, PracticeService]
+  providers: [
+    MissionService,
+    PracticeService,
+    MissionRepository,
+    PracticeContext,
+  ],
+  imports: [
+    TypeOrmModule.forFeature([MissionEntity, UserMissionEntity]),
+    UserModule,
+    ChatModule,
+  ],
+  exports: [MissionService, PracticeService],
 })
 export class MissionModule {}

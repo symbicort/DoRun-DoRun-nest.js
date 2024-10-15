@@ -98,8 +98,6 @@ export default function PreviewContent() {
         },
       );
 
-      console.log("practice api response", response)
-
       setSelectedSentenceData(response.data);
     } catch (error) {
       console.error('getAiExample 받기 실패', error);
