@@ -232,23 +232,6 @@ export class MissionService {
   async textPrompt(data: string): Promise<string> {
     const prompt = await this.makePrompt(data);
     const request_message = `{ "prompt": "Check which expression from the missions the chat corresponds to and return the corresponding missionId(s) as an Array. (e.g. ['lv1_1', 'lv_2']) If no matching missions are found or if the chat sentence does not match the expression from any of the missions, return none in lower case.",${prompt}}`;
-    const parameters =
-      '{\n' +
-      '  "temperature": 0.2,\n' +
-      '  "maxOutputTokens": 256,\n' +
-      '  "topP": 0.95,\n' +
-      '  "topK": 1\n' +
-      '}';
-    const project = 'stately-fabric-435204-t1';
-    const location = 'asia-northeast3';
-
-    // 인증 파일의 경로
-    // const credentialsPath =
-    ('/home/ubuntu/.config/gcloud/application_default_credentials.json');
-
-    // 배포 시 수정
-    const credentialsPath =
-      '/Users/jeongwon/DoRun-DoRun-nest.js/apps/server/application_default_credentials.json';
 
     const response = await this.chatService.sendTextRequest(request_message);
 
