@@ -198,8 +198,6 @@ export class MissionService {
           true,
         );
 
-      console.log('안배운 미션 확인', unusedMissions[0].mission.missionId);
-
       if (unusedMissions.length === 0) {
         return [];
       }
