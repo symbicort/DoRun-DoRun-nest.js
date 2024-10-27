@@ -13,7 +13,7 @@ import {
   WithdrawRequestDto,
   RegisterResDto,
 } from '../dto/user.dto';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { TokenProvider } from './token.provider';
 import { UserRepository } from '../repository/user.repository';
 
