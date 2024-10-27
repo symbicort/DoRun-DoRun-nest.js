@@ -7,7 +7,7 @@ export class TTSService {
   private readonly xiApiKey: string = process.env.TTS_API_KEY;
   private readonly voice_ID: string = process.env.TTS_VOICE_ID;
   private readonly SERVER_PATH =
-    '/home/ubuntu/DoRun-DoRun-nest.js/frontend/dist/pooh.mp3';
+    '/home/ubuntu/DoRun-DoRun-nest.js/apps/client/dist/pooh.mp3';
   // 배포 시 수정
   private readonly LOCAL_PATH =
     '/Users/jeongwon/DoRun-DoRun-nest.js/apps/client/public/pooh.mp3';
@@ -38,7 +38,7 @@ export class TTSService {
         },
       );
 
-      await writeFile(this.LOCAL_PATH, audioStream, {
+      await writeFile(this.SERVER_PATH, audioStream, {
         encoding: 'binary',
       });
       console.log('Audio stream saved successfully.');
