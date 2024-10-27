@@ -10,9 +10,7 @@ const useUserData = () => {
     const fetchData = async () => {
       try {
         // 배포 시 URL 재설정
-        // const API_URL = 'https://43.203.227.36.sslip.io/server';
-
-        const API_URL: string = 'http://localhost:3050'
+        const API_URL = 'https://43.203.227.36.sslip.io/server';
         const response = await axios.get(`${API_URL}/user/authuser`, { withCredentials: true });
         setUserCheck(response.data.result);
         setUser(response.data.userId || '');

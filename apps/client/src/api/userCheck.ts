@@ -1,8 +1,7 @@
 import axios from "axios";
 
 // 배포 시 URL 재설정
-// const API_URL: string = 'https://43.203.227.36.sslip.io/server';
-const API_URL = 'http://localhost:3050'
+const API_URL: string = 'https://43.203.227.36.sslip.io/server';
 
 
 export const userIdCheckApi = async (InputId: string) => {

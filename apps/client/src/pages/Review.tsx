@@ -63,8 +63,8 @@ export default function Review() {
       try {
         const response = await axios.get(
           // 배포 시 URL 재설정
-          //'https://43.203.227.36.sslip.io/server/room/getRooms'
-          'http://localhost:3050/room/getRooms', { withCredentials: true }
+          'https://43.203.227.36.sslip.io/server/room/getRooms', 
+          { withCredentials: true }
         );
         setReviewDatas(response.data);
         setDummyDatas(datas.reviewDatas);

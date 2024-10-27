@@ -41,8 +41,7 @@ export default function PreviewContent() {
       const level = 'lv' + urlID![5];
       const response = await axios.get(
         // 배포 시 URL 재설정
-        // 'https://43.203.227.36.sslip.io/server/learn',
-        'http://localhost:3050/learn',
+        'https://43.203.227.36.sslip.io/server/learn',
         {
           params: { course: level },
           withCredentials: true
@@ -69,24 +68,10 @@ export default function PreviewContent() {
   async function getAiExample(sentence: Sentence) {
     try {
       setIsLoading(true);
-      // const response = await axios.get(
-      //   // 배포 시 URL 설정
-      //   // 'https://43.203.227.36.sslip.io/server/getPractice',
-      //   'http://localhost:3050/practice',
-      //   {
-      //     params: {
-      //       expression: sentence.mission,
-      //       meaning: sentence.meaning,
-      //       level: Number(urlID![5]),
-      //     },
-      //     withCredentials: true
-      //   }
-      // );
-
+      
       const response = await axios.get(
         // 배포 시 URL 재설정
-        // 'https://43.203.227.36.sslip.io/server/practice',
-        'http://localhost:3050/practice',
+        'https://43.203.227.36.sslip.io/server/practice',
         {
           withCredentials: true,
           params: {
@@ -125,8 +110,7 @@ export default function PreviewContent() {
       );
       await axios.post(
         // 배포 시 URL 재설정
-        // 'https://43.203.227.36.sslip.io/server/learned', 
-        'http://localhost:3050/learned',
+        'https://43.203.227.36.sslip.io/server/learned', 
         {
         mission_id: sentences[index].missionId,
       },{ withCredentials: true });

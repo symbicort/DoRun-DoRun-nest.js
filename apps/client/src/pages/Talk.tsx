@@ -88,8 +88,8 @@ function Talk() {
 	const [missionsComplete, setMissionsComplete] = useState<string[]>([]); //미션 완료 목록
 
 	// 배포 시 URL 재설정
-	// const API_URL = 'https://43.203.227.36.sslip.io/server';
-	const API_URL: string = 'http://localhost:3050'
+	const API_URL = 'https://43.203.227.36.sslip.io/server';
+
 	// 데이터
 	// const data: Mission[] = [
 	// 	{
@@ -404,7 +404,7 @@ function Talk() {
 			const formData = new FormData();
 
 			formData.append('audio', audioFile);
-			const response = await axios.post('http://localhost:3050/chat/speech', formData, {
+			const response = await axios.post(`${API_URL}/speech`, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},
