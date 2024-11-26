@@ -1,8 +1,8 @@
 # Node.js 20 기반 이미지 사용
-FROM node:20-alpine AS build
+FROM node:lts AS build
 
 # 작업 디렉토리 설정
-WORKDIR /app/server
+WORKDIR /app
 
 # package.json 및 package-lock.json 복사
 COPY package*.json ./
@@ -20,7 +20,7 @@ RUN npm run build
 RUN chmod +x ./dist/main.js
 
 # 포트 설정
-EXPOSE 3000
+EXPOSE 3050
 
 # 서버 실행
 CMD ["node", "./dist/main.js"]

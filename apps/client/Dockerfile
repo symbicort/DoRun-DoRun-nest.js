@@ -1,5 +1,5 @@
 # Node.js 20 기반 이미지 사용
-FROM node:20-alpine AS build
+FROM node:lts AS build
 
 # 작업 디렉토리 설정
 WORKDIR /app/client
@@ -23,7 +23,8 @@ FROM nginx:alpine
 COPY --from=build /app/client/dist /usr/share/nginx/html
 
 # Nginx 설정 파일 복사 (필요시)
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+RUN rm -rf /etc/nginx/conf.d
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # 포트 설정
 EXPOSE 80
