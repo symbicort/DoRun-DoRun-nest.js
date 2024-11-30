@@ -25,5 +25,5 @@ jobs: # Workflow에서 실행할 작업(job)들을 정의합니다.
           script: | # 서버에서 실행할 스크립트입니다.
             cd /home/ubuntu/DoRun-DoRun-nest.js # 작업 디렉토리를 변경합니다.
             git pull origin main --force
-            sudo docker-compose pull # docker-compose.yml 파일에 정의된 이미지를 pull합니다. (Docker Hub에서 가져오거나 로컬에서 빌드)
+            sudo docker-compose pull
             sudo docker-compose up -d --remove-orphans # 컨테이너를 detached 모드로 실행합니다. --remove-orphans 옵션은 docker-compose 파일에서 제거된 컨테이너를 삭제합니다.
