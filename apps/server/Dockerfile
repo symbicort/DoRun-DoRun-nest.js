@@ -5,7 +5,9 @@ FROM node:lts-alpine AS build
 WORKDIR /app
 
 # package.json 및 package-lock.json 복사
-COPY package*.json ./
+# COPY package*.json ./
+
+RUN npm i
 
 # 의존성 설치
 RUN npm ci
