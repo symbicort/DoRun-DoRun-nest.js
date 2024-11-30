@@ -1,0 +1,26 @@
+name: Deploy to Server 
+
+on:
+  push: # push 이벤트 발생 시 실행됩니다.
+    branches: [ main ] # main 브랜치에 push할 때만 실행됩니다.
+
+jobs: # Workflow에서 실행할 작업(job)들을 정의합니다.
+  deploy: # deploy라는 이름의 job을 정의합니다.
+    runs-on: ubuntu-latest # job을 실행할 환경(runner)을 지정합니다. 여기서는 ubuntu-latest를 사용합니다.
+
+    steps: # job 내에서 실행할 단계(step)들을 정의합니다. 각 step은 순차적으로 실행됩니다.
+      - uses: actions/checkout@v3 # 저장소를 체크아웃하는 액션입니다. Workflow가 실행될 때 저장소의 코드를 runner에 다운로드합니다.
+
+      - name: Set up Docker Buildx # Docker Buildx를 설정하는 단계입니다. 멀티 아키텍처 빌드를 지원합니다.
+        uses: docker/setup-buildx-action@v2 # Docker Buildx 액션을 사용합니다.
+
+      - name: Deploy to Server via SSH # 서버에 배포하는 단계입니다.
+        uses: appleboy/ssh-action@v0.1.7  # SSH 접속 액션을 사용합니다.
+        with:
+          host: ${{ secrets.SERVER_IP }} # 서버 IP 주소를 secrets에서 가져옵니다.
+          username: ${{ secrets.SERVER_USERNAME }} # 서버 사용자 이름을 secrets에서 가져옵니다.
+          key: ${{ secrets.SERVER_SSH_KEY }}  # 서버 SSH 개인 키를 secrets에서 가져옵니다.
+          script: | # 서버에서 실행할 스크립트입니다.
+            cd /home/ubuntu/DoRun-DoRun-nest.js # 작업 디렉토리를 변경합니다.
+            docker-compose pull # docker-compose.yml 파일에 정의된 이미지를 pull합니다. (Docker Hub에서 가져오거나 로컬에서 빌드)
+            docker-compose up -d --remove-orphans # 컨테이너를 detached 모드로 실행합니다. --remove-orphans 옵션은 docker-compose 파일에서 제거된 컨테이너를 삭제합니다.
