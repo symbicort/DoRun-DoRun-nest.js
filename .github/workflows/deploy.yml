@@ -14,6 +14,8 @@ jobs: # Workflow에서 실행할 작업(job)들을 정의합니다.
       - name: Set up Docker Buildx # Docker Buildx를 설정하는 단계입니다. 멀티 아키텍처 빌드를 지원합니다.
         uses: docker/setup-buildx-action@v2 # Docker Buildx 액션을 사용합니다.
 
+        
+
       - name: Deploy to Server via SSH # 서버에 배포하는 단계입니다.
         uses: appleboy/ssh-action@v0.1.7  # SSH 접속 액션을 사용합니다.
         with:
