@@ -1,5 +1,5 @@
 # Node.js 20 기반 이미지 사용
-FROM node:lts AS build
+FROM node:lts-alpine AS build
 
 # 작업 디렉토리 설정
 WORKDIR /app/client
