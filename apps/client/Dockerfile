@@ -4,8 +4,10 @@ FROM node:lts-alpine AS build
 # 작업 디렉토리 설정
 WORKDIR /app/client
 
-# package.json 및 package-lock.json 복사
-COPY package*.json ./
+# # package.json 및 package-lock.json 복사
+# COPY package*.json ./
+
+RUN npm i
 
 # 의존성 설치
 RUN npm ci
