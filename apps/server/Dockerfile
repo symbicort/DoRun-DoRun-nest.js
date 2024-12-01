@@ -15,10 +15,9 @@ RUN npm ci
 # server 코드 복사
 COPY . .
 
-RUN NODE_OPTIONS="--max-old-space-size=4096"
+#빌드 실행
+RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build
 
-# 빌드 실행
-RUN npm run build
 
 # # 실행 권한 부여
 # RUN chmod +x ./dist/main.js
