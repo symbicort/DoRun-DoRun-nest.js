@@ -25,8 +25,7 @@ let MissionService = class MissionService {
         this.userService = userService;
         this.chatService = chatService;
         this.client = new aiplatform_1.PredictionServiceClient({
-            projectId: 'stately-fabric-435204-t1',
-            keyFilename: '/Users/jeongwon/DoRun-DoRun-nest.js/apps/server/application_default_credentials.json',
+            projectId: 'augmented-voice-443414-c8',
         });
     }
     async addUserMissionsForCourse(course, accessToken, refreshToken) {
