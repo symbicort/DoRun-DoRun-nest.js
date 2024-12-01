@@ -1,11 +1,11 @@
 # Node.js 20 기반 이미지 사용
 FROM node:lts-alpine AS build
 
+COPY application_default_credentials.json /app/application_default_credentials.json
+
 WORKDIR /app
 
 COPY package*.json ./
-
-COPY application_default_credentials.json /app/application_default_credentials.json
 
 # 환경 변수 설정
 ENV GOOGLE_APPLICATION_CREDENTIALS="/app/application_default_credentials.json"
