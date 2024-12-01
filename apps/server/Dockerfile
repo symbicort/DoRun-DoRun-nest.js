@@ -1,9 +1,9 @@
 # Node.js 20 기반 이미지 사용
 FROM node:lts-alpine AS build
 
-COPY application_default_credentials.json /app/application_default_credentials.json
-
 WORKDIR /app
+
+COPY ../application_default_credentials.json application_default_credentials.json
 
 COPY package*.json ./
 
