@@ -16,7 +16,7 @@ RUN npm ci
 COPY . .
 
 # 빌드 실행
-RUN npm run build
+RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build
 
 # Nginx 기반 이미지 사용
 FROM nginx:alpine
