@@ -25,4 +25,4 @@ RUN npm run build
 EXPOSE 3050
 
 # 서버 실행
-CMD ["node", "./dist/main.js"]
+CMD ["node", "--max-old-space-size=512", "./dist/main.js"]
