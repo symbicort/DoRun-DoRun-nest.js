@@ -7,6 +7,9 @@ WORKDIR /app
 # package.json 및 package-lock.json 복사
 COPY package*.json ./
 
+COPY /home/ubuntu/.config/gcloud/application_default_credentials.json /run/secrets/
+ENV GOOGLE_APPLICATION_CREDENTIAL /run/secrets/application_default_credentials.json
+
 RUN npm i
 
 # 의존성 설치

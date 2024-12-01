@@ -21,10 +21,9 @@ export class MissionService {
     private readonly chatService: ChatService,
   ) {
     this.client = new PredictionServiceClient({
-      projectId: 'stately-fabric-435204-t1',
+      projectId: 'augmented-voice-443414-c8',
       // 배포 시 243번째 줄 경로로 수정
-      keyFilename:
-        '/Users/jeongwon/DoRun-DoRun-nest.js/apps/server/application_default_credentials.json',
+      keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIAL,
     });
   }
 

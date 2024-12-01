@@ -18,7 +18,7 @@ let ChatService = class ChatService {
     constructor() {
         this.model = 'gemini-1.5-pro-001';
         this.vertex_ai = new vertexai_1.VertexAI({
-            project: 'stately-fabric-435204-t1',
+            project: 'augmented-voice-443414-c8',
             location: 'asia-northeast3',
         });
         this.chatModel = this.vertex_ai.preview.getGenerativeModel({

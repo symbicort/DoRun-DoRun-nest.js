@@ -17,7 +17,7 @@ export class ChatService {
 
     // VertexAI 인스턴스 생성
     this.vertex_ai = new VertexAI({
-      project: 'stately-fabric-435204-t1',
+      project: 'augmented-voice-443414-c8',
       location: 'asia-northeast3',
     });
 
