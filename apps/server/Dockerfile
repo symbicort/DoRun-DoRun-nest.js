@@ -15,8 +15,7 @@ RUN npm ci
 # server 코드 복사
 COPY . .
 
-RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build
-
+RUN NODE_OPTIONS="--max-old-space-size=4096"
 
 # 빌드 실행
 RUN npm run build
