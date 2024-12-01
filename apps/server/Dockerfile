@@ -3,7 +3,9 @@ FROM node:lts-alpine AS build
 
 WORKDIR /app
 
-COPY ../application_default_credentials.json application_default_credentials.json
+RUN PWD
+
+COPY application_default_credentials.json app/application_default_credentials.json
 
 COPY package*.json ./
 
