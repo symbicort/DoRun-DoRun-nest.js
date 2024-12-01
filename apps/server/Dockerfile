@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 COPY /home/ubuntu/.config/gcloud/application_default_credentials.json /run/secrets/
-ENV GOOGLE_APPLICATION_CREDENTIAL /run/secrets/application_default_credentials.json
+ENV GOOGLE_APPLICATION_CREDENTIAL=/run/secrets/application_default_credentials.json
 
 RUN npm i
 
