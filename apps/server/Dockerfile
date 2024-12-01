@@ -3,14 +3,7 @@ FROM node:lts-alpine AS build
 
 WORKDIR /app
 
-RUN PWD
-
-COPY application_default_credentials.json app/application_default_credentials.json
-
 COPY package*.json ./
-
-# 환경 변수 설정
-ENV GOOGLE_APPLICATION_CREDENTIALS="/app/application_default_credentials.json"
 
 RUN npm i
 

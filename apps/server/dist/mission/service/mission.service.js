@@ -26,6 +26,7 @@ let MissionService = class MissionService {
         this.chatService = chatService;
         this.client = new aiplatform_1.PredictionServiceClient({
             projectId: 'augmented-voice-443414-c8',
+            keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
         });
     }
     async addUserMissionsForCourse(course, accessToken, refreshToken) {
