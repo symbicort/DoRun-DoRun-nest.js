@@ -9,13 +9,13 @@ services:
     depends_on:
       - server
 
-  server:
-    build:
-      context: ./apps/server
-      dockerfile: Dockerfile
-    ports:
-      - "3050:3050"
-    environment:
-      - NODE_ENV=production
-    volumes: # 서버 빌드 결과물을 유지하기 위해 볼륨 사용 (선택)
-      - ./apps/server/dist:/app/dist
+  # server:
+  #   build:
+  #     context: ./apps/server
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3050:3050"
+  #   environment:
+  #     - NODE_ENV=production
+  #   volumes: # 서버 빌드 결과물을 유지하기 위해 볼륨 사용 (선택)
+  #     - ./apps/server/dist:/app/dist
