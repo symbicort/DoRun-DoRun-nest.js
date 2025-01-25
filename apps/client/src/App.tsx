@@ -9,8 +9,8 @@ import Talk from './pages/Talk';
 import PreviewContent from './components/PreviewContent';
 import Chat from './pages/Chat';
 import Learn from './pages/Learn';
-import Auth from './components/Mypage';
-import AuthPw from './components/MypagePw'
+import Mypage from './pages/Mypage';
+import MypagePW from './pages/MypagePW'
 import Spinner from './components/Spinner';
 import ReviewContent from './components/ReviewContent';
 import Wordquiz from './components/Wordquiz';
@@ -34,8 +34,8 @@ function App() {
       </Route>
       <Route path='/register' element={<Register />} />
       <Route path='/login' element={<Login />} />
-      <Route path='/mypage' element={<Auth />} />
-      <Route path='/mypagepw' element={<AuthPw />} />
+      <Route path='/mypage' element={<Mypage />} />
+      <Route path='/mypagepw' element={<MypagePW />} />
       <Route path='/spinner' element={<Spinner loadingText='잠시만 기다려주세요...'/>} />
     </Routes>
     </BrowserRouter>

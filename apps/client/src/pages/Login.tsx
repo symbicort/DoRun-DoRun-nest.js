@@ -1,6 +1,6 @@
-import { Link  } from 'react-router-dom';
 import '../assets/css/auth.css';
 import LoginForm from '../components/LoginForm';
+import { LogoLink } from '../components/LogoLink';
 import { RegisterLinks } from '../components/RegisterLink';
 
 export default function Login() {  
@@ -9,9 +9,7 @@ export default function Login() {
       <div className='form-area'>
         <div className='form-elements'>
           <div className='form-title'>
-            <Link to='/'>
-              <h1 className='logo'>DoRun-DoRun</h1>
-            </Link>
+           <LogoLink path={'/'}>DorunDorun</LogoLink>
           </div>
           <div className='form-box'>
             <LoginForm/>
