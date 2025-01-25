@@ -18,9 +18,6 @@ import { Popup } from './(talk)/Popup'; // 팝업
 import { ChatHistory } from './(talk)/ChatList'; // 대화 내역
 import { firework } from '../utils/firework'; // 미션완료시 폭죽 효과
 
-// 파비콘 출처 : http://si.serverzero.kr/main/pc/index.php#five
-// 이미지 출처 : https://m.blog.naver.com/sinnam88/221375405075
-
 export interface Mission {
 	missionId: string;
 	mission: string;
@@ -89,28 +86,6 @@ function Talk() {
 
 	// 배포 시 URL 재설정
 	const API_URL = 'https://43.203.227.36.sslip.io/server';
-
-	// 데이터
-	// const data: Mission[] = [
-	// 	{
-	// 		missionId: 'lv1_1',
-	// 		mission: 'I am trying to',
-	// 		meaning: '~ 해 보려고 하는 중이에요',
-	// 		complete: false,
-	// 	},
-	// 	{
-	// 		missionId: 'lv1_2',
-	// 		mission: 'I am ready to',
-	// 		meaning: '~ 할 준비가 되었어요',
-	// 		complete: false,
-	// 	},
-	// 	{
-	// 		missionId: 'lv1_3',
-	// 		mission: 'I am just about to',
-	// 		meaning: '지금 막 ~ 하려는 참이에요',
-	// 		complete: false,
-	// 	},
-	// ];
 
 	const getMissions = async () => {
 		try {

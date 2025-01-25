@@ -1,7 +1,7 @@
-import { useState /* , useEffect */ } from 'react';
+import { useState } from 'react';
 import '../index.css';
 import '../assets/css/home.css';
-import datas from '../../datas.json'; //임시 데이터
+import datas from '../../datas.json'; 
 import { CharacterList } from './Chat';
 import { Link } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ function Home() {
   };
 
   const randomRecommendations = getRandomElements(datas.characters, 4);
-  const [recomm] = useState(randomRecommendations); //임시
+  const [recomm] = useState(randomRecommendations); 
 
   return (
     <>

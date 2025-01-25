@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { IoArrowForward } from 'react-icons/io5';
 import '../assets/css/reviewContent.css';
-// import datas from '../../datas.json';
 
 interface ConversationData {
   id: string;
@@ -18,9 +17,6 @@ interface ConversationData {
 }
 
 export default function ReviewContent() {
-  // 임시 데이터
-  // const dummyData = datas.chat;
-
   const { id } = useParams<{ id: string }>();
   const [conversationData, setConversationData] = useState<
     ConversationData[] | null
@@ -31,7 +27,6 @@ export default function ReviewContent() {
     const fetchData = async () => {
       try {
         const response = await axios.get<ConversationData[]>(
-          // 배포 시 URL 재설정
           `https://43.203.227.36.sslip.io/server/message/getMessagesByRoomid`,
           { params: { roomid: id },withCredentials: true }
         );

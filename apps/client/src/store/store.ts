@@ -1,26 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
-// import { persistReducer, persistStore } from 'redux-persist';
-// import storage from 'redux-persist/lib/storage';
-import signUpReducer from './features/signUpSlice';
+import authReducer from './features/registerSlice';
 import loginReducer from './features/loginSlice';
-import userCheckReducer from './features/userIdCheck';
-
-// const persistConfig = {
-//   key: 'root',
-//   storage,
-//   whitelist: ['login'], 
-// };
-
-// const persistedLoginReducer = persistReducer(persistConfig, loginReducer); 
+import userCheckReducer from './features/userIdCheckSlice';
+import userReducer from './features/userSlice'
 
 const store = configureStore({
   reducer: {
-    signup: signUpReducer,
+    register: authReducer,
     login: loginReducer,
     usercheck: userCheckReducer,
+    users : userReducer
   },
 });
 
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
 export default store;
-// export const persistor = persistStore(store);
-// export type AppDispatch = typeof store.dispatch;

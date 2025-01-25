@@ -1,15 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../assets/css/preview.css';
+import { levelLinks } from '../constance';
 
 export default function Preview() {
   const navigate = useNavigate();
-  const levelLinks = [
-    { id: 'level0', label: 'Lv.0' },
-    { id: 'level1', label: 'Lv.1' },
-    { id: 'level2', label: 'Lv.2' },
-    { id: 'level3', label: 'Lv.3' },
-  ];
 
   const handlePreviewClick = async (linkId: string) => {
     try {

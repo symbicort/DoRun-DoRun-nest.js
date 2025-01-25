@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form';
 import '../assets/css/auth.css';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useUserData from './UserData';
-
+import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
+import { fetchUserInfo, changeUserEmail, withdrawUser } from '../store/features/action/userAction';
 
 type FormData = {
   userId: string;
@@ -14,7 +14,9 @@ type FormData = {
 
 export default function Mypage() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { userCheck } = useUserData();
+  const { userId, email, password } = useAppSelector((state) => state.users);
 
   const {
     register,
@@ -23,73 +25,37 @@ export default function Mypage() {
     formState: { errors },
   } = useForm<FormData>();
 
-  // 배포 시 URL 재설정
-  const API_URL = 'https://43.203.227.36.sslip.io/server';
-
-  const [getUser, setGetUser] = useState<FormData>({
-    userId: '',
-    email: '',
-    password: ''
-  });
-
-  //auth 유저 불러오기
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/user/info`, { withCredentials: true });
-        const userData = response.data; 
-        setGetUser(userData); 
-        setValue('userId', userData.userId);
-        setValue('email', userData.email);
-        setValue('password', userData.password);
-      } catch (error) {
-        console.error('에러:', error);
-      }
-    };
-    fetchData();
-  }, [setValue]);
+    dispatch(fetchUserInfo());
+  }, [dispatch]);
 
-  // 이메일 변경
+  useEffect(() => {
+    if (userId) {
+      setValue('userId', userId);
+      setValue('email', email);
+      setValue('password', password);
+    }
+  }, [userId, email, password, setValue]);
+
   const handleEmailChange = async (userdata: FormData) => {
     try {
-      const requestData = {
-        userid: userdata.userId,
-        email: userdata.email,
-        inputpw: userdata.password
-      };
-  
-      const emailResponse = await axios.patch(`${API_URL}/user/changeEmail`, requestData, {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json' 
-        }
-      });
-
-      if (emailResponse.data.result === false) {
-        alert(emailResponse.data.msg);
-      } else {
-        navigate(`/`);
-        alert('이메일이 변경되었습니다');
-      }
+      await dispatch(changeUserEmail(userdata)).unwrap();
+      navigate('/');
+      alert('이메일이 변경되었습니다');
     } catch (error) {
-      console.error('에러:', error);
+      alert(error.message || '이메일 변경 중 오류가 발생했습니다.');
     }
   };
 
-
-  //회원탈퇴
   const handleWithdraw = async () => {
     const confirmWithdraw = window.confirm('정말로 회원탈퇴를 하시겠습니까?');
     if (confirmWithdraw) {
       try {
-        const response = await axios.delete(`${API_URL}/user/withdraw`, {
-          data: { userId: getUser.userId }, 
-          withCredentials: true
-        });
-        console.log(response.data);
+        await dispatch(withdrawUser(userId)).unwrap();
         navigate('/');
       } catch (error) {
         console.error('에러:', error);
+        alert('회원 탈퇴 중 오류가 발생했습니다.');
       }
     }
   };
@@ -113,7 +79,7 @@ export default function Mypage() {
                 </label>
                 <input
                   className='auth-input'
-                  value={getUser.userId}
+                  value={userId}
                   type='text'
                   id='userId'
                   disabled
@@ -126,6 +92,7 @@ export default function Mypage() {
                   className='auth-input'
                   type='email'
                   id='email'
+                  value={email}
                   placeholder='이메일을 변경해주세요'
                   {...register('email', {
                     required: '이메일을 입력해주세요',
@@ -175,20 +142,20 @@ export default function Mypage() {
                     {errors.password.message}
                   </span>
                 )}
-                 <Link to='/mypagepw'>
-              <p className='auth-span text-blue-500 font-black text-left mt-4 cursor-pointer' role='alert'>
-                비밀번호 변경
-              </p>
-              </Link>
-              <button className='auth-btn mt-11' type='submit'>
-              이메일 변경하기
-            </button>
+                <Link to='/mypagepw'>
+                  <p className='auth-span text-blue-500 font-black text-left mt-4 cursor-pointer' role='alert'>
+                    비밀번호 변경
+                  </p>
+                </Link>
+                <button className='auth-btn mt-11' type='submit'>
+                  이메일 변경하기
+                </button>
               </form>
               <p onClick={handleWithdraw} className='auth-span font-black opacity-60 mb-4 text-right cursor-pointer' role='alert'>
                 회원탈퇴
               </p>
             </div> 
-            )}
+          )}
         </div>
       </div>
     </div>

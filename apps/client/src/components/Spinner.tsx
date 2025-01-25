@@ -3,6 +3,8 @@ import Lottie from 'lottie-react';
 import loadingCat from '../../cat_spinner.json';
 import '../assets/css/spinner.css';
 
+
+
 function Spinner({ loadingText }) {
   const [fadeIn, setFadeIn] = useState(false);
 

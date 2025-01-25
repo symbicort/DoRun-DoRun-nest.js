@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { LuRepeat } from 'react-icons/lu';
-import { HiSpeakerWave } from 'react-icons/hi2';
+// import { HiSpeakerWave } from 'react-icons/hi2';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Spinner from './Spinner';

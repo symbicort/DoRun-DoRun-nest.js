@@ -98,7 +98,7 @@ export default function Wordquiz() {
       {showQuestions && (
         <div>
           <p className='text-2xl font-semibold text-gray-800 mb-3 py-4'>
-            <span className='bg-blue-100 px-2 py-1 rounded-lg shadow-md mr-2'>
+            <span className='px-2 py-1 rounded-lg mr-2'>
               {krAnswer}
             </span>
           </p>
@@ -130,6 +130,9 @@ export default function Wordquiz() {
           {!wrongAnswer && (
             <button
               onClick={checkAnswer}
+              style={{
+                background: 'var(--highlight-color)',
+              }}
               className='mt-8 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded'
             >
               확인
@@ -138,7 +141,7 @@ export default function Wordquiz() {
 
           {wrongAnswer && (
             <div className='mt-4'>
-              <h1 className='text-red-600'>틀렸습니다.</h1>
+              <h1 className='text-red-400'>아쉬워요 ㅠㅠ 틀렸습니다!</h1>
               <strong>
                 정답은{' '}
                 <span className='text-blue-500'>
@@ -161,7 +164,7 @@ export default function Wordquiz() {
           {userAnswer && !wrongAnswer && (
             <button
               onClick={undoClick}
-              className='mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded'
+              className='mt-4 bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded'
             >
               되돌리기
             </button>

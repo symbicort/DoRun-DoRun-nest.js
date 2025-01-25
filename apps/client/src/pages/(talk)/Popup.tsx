@@ -59,10 +59,6 @@ export const Popup: React.FC<PopupProps> = ({ title, correctDatas, charDatas, ms
 			case '오늘의 학습 미션':
 				return (
 					<>
-						{/* <p className="todo">
-							<span>오늘의 목표: 미달({datas.filter((data) => data.complete).length}/3)</span>{' '}
-							<span>전체 목표량 : {mssCount}/30일</span>
-						</p> */}
 						<ul className="list-mission">
 							{mssDatas?.length === 0 ? (
 								<li className="nodata">오늘의 미션이 없습니다</li>

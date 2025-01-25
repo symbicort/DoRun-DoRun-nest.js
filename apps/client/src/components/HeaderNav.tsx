@@ -1,16 +1,15 @@
 import { Link } from 'react-router-dom';
 import { FaBell } from 'react-icons/fa';
-import { useAppDispatch } from '../hooks';
-import { logoutUser } from '../store/features/loginSlice';
 import useUserData from '../components/UserData';
 import '../assets/css/headerNav.css';
 import { useEffect } from 'react';
+import { logoutUser } from '../store/features/action/authAction';
+import { useAppDispatch } from '../hooks/useRedux';
 
 export default function Header() {
   const {
     user,
     setUser,
-    userCheck,
     setUserCheck,
     profileImage,
     setProfileImage,
@@ -37,7 +36,7 @@ export default function Header() {
         <FaBell />
       </button>
       <div className='nav-login'>
-        {userCheck ? (
+        {user ? (
           <div className='flex items-center space-x-4'>
             <Link to='/mypage' className='flex items-center'>
               {user}
