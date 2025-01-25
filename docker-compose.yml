@@ -1,13 +1,11 @@
 version: '3.9'
 services:
-  client:
-    build:
-      context: ./apps/client
-      dockerfile: Dockerfile
-    ports:
-      - "3000:80"
-    # depends_on:
-    #   - server
+  # client:
+  #   build:
+  #     context: ./apps/client
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:80"
 
   # server:
   #   build:
@@ -17,5 +15,5 @@ services:
   #     - "3050:3050"
   #   environment:
   #     - NODE_ENV=production
-  #   volumes: # 서버 빌드 결과물을 유지하기 위해 볼륨 사용 (선택)
+  #   volumes:
   #     - ./apps/server/dist:/app/dist
