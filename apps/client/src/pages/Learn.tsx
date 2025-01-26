@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
 import Preview from '../components/Preview';
-import Wordquiz from '../components/Wordquiz';
+import Wordquiz from './Wordquiz';
 import TabButton from '../components/TabButton';
 import TabContent from '../components/TabContent';
 

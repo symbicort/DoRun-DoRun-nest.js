@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import datas from '../../datas.json'; //임시 데이터
+import datas from '../../datas.json'; 
+import '../assets/css/chat.css'
+
 
 export const CharacterList = ({ data }) => {
   return (

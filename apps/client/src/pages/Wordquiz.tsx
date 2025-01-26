@@ -1,18 +1,16 @@
 import { useState } from 'react';
 import { firework } from '../utils/firework';
-import { enAnswersData, enAnswersLv2Data } from '../utils/word';
+import { enAnswersData } from '../utils/word';
 
 export default function Wordquiz() {
   const [showQuestions, setShowQuestions] = useState(false);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // 현재 질문
-  const [currentLevel, setCurrentLevel] = useState(1); // 현재 레벨
-  const [enAnswers, setEnAnswers] = useState(enAnswersData); // LEVEL 1
-  const [enAnswers_lv2, setEnAnswers_lv2] = useState(enAnswersLv2Data); // LEVEL 2
-  const [currentAnswer, setCurrentAnswer] = useState(enAnswers[currentQuestionIndex]); // 답변
-  const [krAnswer, setKrAnswer] = useState(enAnswers[currentQuestionIndex].krTranslation); // 해석
-  const [questionArr, setQuestionArr] = useState(enAnswers[currentQuestionIndex].question.split(' ')); // 문제 종합
-  const [userAnswer, setUserAnswer] = useState(''); // 내 답변
-  const [wrongAnswer, setWrongAnswer] = useState(false); // 틀리면 나오는
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // 동적으로 값을 맵핑
+  const [userAnswer, setUserAnswer] = useState(''); // 유저 제출한 답
+  const [wrongAnswer, setWrongAnswer] = useState(false); // 틀렸을 경우
+
+  const currentAnswer = enAnswersData[currentQuestionIndex];
+  const krAnswer = currentAnswer.krTranslation
+  const [questionArr, setQuestionArr] = useState(() => currentAnswer.question.split(' '));
 
   const checkAnswer = () => {
     if (userAnswer.trim() === '') {
@@ -31,7 +29,7 @@ export default function Wordquiz() {
     }
   };
 
-  const userAnswerHandler = (word) => {
+  const userAnswerHandler = (word : string) => {
     setUserAnswer((prevAnswer) => {
       if (prevAnswer === '') {
         return word;
@@ -43,38 +41,23 @@ export default function Wordquiz() {
   };
 
   const moveToNextQuestion = () => {
-    if (currentQuestionIndex < enAnswers.length - 1) {
+    if (currentQuestionIndex < enAnswersData.length - 1) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-      setCurrentAnswer(enAnswers[currentQuestionIndex + 1]);
-      setQuestionArr(enAnswers[currentQuestionIndex + 1].question.split(' '));
-      setKrAnswer(enAnswers[currentQuestionIndex + 1].krTranslation);
+      setQuestionArr(enAnswersData[currentQuestionIndex + 1].question.split(' '));
       setUserAnswer('');
       setWrongAnswer(false);
     } else {
-      // 모든 문제를 푼 경우
-      if (currentLevel === 1) {
-        alert('모든 Level 1 문제를 푸셨습니다! Level 2로 이동합니다.');
-        setCurrentLevel(2);
-        setEnAnswers(enAnswers_lv2);
-        setCurrentQuestionIndex(0);
-        setCurrentAnswer(enAnswers_lv2[0]);
-        setQuestionArr(enAnswers_lv2[0].question.split(' '));
-        setKrAnswer(enAnswers_lv2[0].krTranslation);
-        setUserAnswer('');
-        setWrongAnswer(false);
-      } else {
-        alert('모든 문제를 푸셨습니다!');
-      }
+      alert('모든 문제를 푸셨습니다!');
     }
   };
 
   const undoClick = () => {
     setUserAnswer((prevAnswer) => {
       const words = prevAnswer.split(' ');
-      words.pop();
+      const lastWord = words.pop() || '';
+      setQuestionArr((prevArr) => [...prevArr, lastWord]);
       return words.join(' ');
     });
-    setQuestionArr((prevArr) => [...prevArr, userAnswer.split(' ').pop()]);
   };
 
   return (

@@ -1,11 +1,10 @@
 /* Home */
-/* 공통 */
 .list-title.main-title {
-  @apply p-0 mb-1 mt-20;
+  @apply p-0 mt-6;
 }
 
 .main-list-describe {
-  @apply mb-10 text-[var(--sub-font-color)] text-lg;
+  @apply mb-1 text-[var(--sub-font-color)] text-lg;
 }
 
 .banner-link {
@@ -27,7 +26,7 @@
 
 /* 사이트 소개 배너 */
 .banner {
-  @apply flex w-full py-4 relative rounded-xl bg-[var(--bg-highlight-color)];
+  @apply flex w-full h-80 py-4 relative rounded-xl bg-[var(--bg-highlight-color)] ;
 }
 
 .banner-text-area {
@@ -48,7 +47,7 @@
 }
 
 .one-img {
-  @apply block w-10/12 max-w-7xl object-cover object-center md:hidden w-full;
+  @apply block w-10/12 max-w-7xl object-cover object-center md:hidden;
 }
 
 .all-img {
@@ -59,67 +58,25 @@
   margin-top: 30px;
 }
 
-/* 캐릭터 대화 목록 소개 */
-.list-char {
-  @apply grid grid-cols-2 lg:grid-cols-4 gap-3;
-}
-.list-char li {
-  @apply rounded-xl overflow-hidden hover:shadow-md duration-300 border border-[var(--border-divide-color)];
-}
-.list-char a {
-  @apply relative flex flex-col text-[var(--btn)] hover:text-black rounded-lg bg-[--bg-highlight-color];
-}
-.list-char a.none {
-  @apply cursor-default;
-}
-.list-char a.none:hover > * {
-  filter: blur(1px);
-  @apply text-gray-400;
-}
-.list-char a.none:after {
-  content: '준비 중입니다';
-  font-size: 3vw;
-  @apply absolute top-0 left-0 w-full h-full flex justify-center pt-[40%] text-gray-500 bg-[var(--bg-highlight-color)] opacity-0 transition-opacity sm:text-lg;
-}
-.list-char a.none:hover:after {
-  @apply opacity-60;
-}
-.list-char li .img {
-  @apply relative pt-[85%] rounded-xl object-cover overflow-hidden;
-}
-.list-char li img {
-  @apply absolute top-0 w-full h-full object-cover transition-all duration-300 ease-in-out bg-white;
-}
-.list-char li:hover img {
-  @apply scale-110;
-}
-.list-char li dl {
-  @apply m-3 md:m-5;
-}
-.list-char li .name {
-  @apply truncate font-bold text-black;
-}
-
 /* 예문, 퀴즈 소개 */
 .main-learn {
   @apply sm:block lg:flex gap-4;
 }
 
 .main-learn > div {
-  /* flex: 1 0 auto; */
   @apply lg:w-1/2
 }
 
 .banner-img-txt {
-  @apply relative flex justify-between box-content h-60 pt-6 pb-4 px-8 rounded-xl;
+  @apply relative flex justify-between box-content h-[32vh] pt-6 pb-4 px-8 rounded-xl;
 }
 
 .banner-img-txt.study {
-  @apply bg-[#dfd4f3];
+  @apply bg-[#dfd4f3] transition-colors duration-300 ease-in-out hover:bg-[#e8e0f7];
 }
 
 .banner-img-txt.quiz {
-  @apply bg-[#dcf0d8];
+  @apply bg-[#dcf0d8] transition-colors duration-300 ease-in-out hover:bg-[#e5f5e2];
 }
 
 .banner-txt {
@@ -127,20 +84,34 @@
 }
 
 .banner-txt > p {
-  text-shadow:1px 1px rgba(255,255,255,.5);
+  text-shadow: 1px 1px rgba(255,255,255,.5);
   text-shadow: rgb(255, 255, 255) 1px 0px 0px, rgb(255, 255, 255) 0.540302px 0.841471px 0px, rgb(255, 255, 255) -0.416147px 0.909297px 0px, rgb(255, 255, 255) -0.989992px 0.14112px 0px, rgb(255, 255, 255) -0.653644px -0.756802px 0px, rgb(255, 255, 255) 0.283662px -0.958924px 0px, rgb(255, 255, 255) 0.96017px -0.279415px 0px;
-  @apply pt-10 pb-8 text-3xl font-semibold;
+  @apply pt-10 pb-8 text-5xl font-semibold transition-all duration-300 ease-in-out;
 }
-.banner-img{
-  @apply absolute right-[5%];
+
+.banner-img-txt:hover .banner-txt > p {
+  @apply text-[3rem] transform scale-105;
+}
+
+
+.banner-img {
+  @apply absolute right-[3%] top-[10%];
+  transition: transform 0.3s ease-in-out;
+}
+
+.banner-img-txt:hover .banner-img {
+  transform: scale(1.1);
 }
 
 .banner-img > img {
   width: 100%;
-  max-width: 200px;
+  max-width: 280px;
 }
 
-.banner-img.study > img {
-  width: 100%;
-  max-width: 250px;
+.banner-img.study {
+  transition: transform 0.2s ease-in-out;
+}
+
+.banner-img-txt:hover .banner-img.study {
+  transform: scale(1.1);
 }

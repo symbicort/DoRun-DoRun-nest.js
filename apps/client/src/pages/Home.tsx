@@ -1,22 +1,11 @@
-import { useState } from 'react';
 import '../index.css';
-import '../assets/css/home.css';
-import datas from '../../datas.json'; 
-import { CharacterList } from './Chat';
+import '../assets/css/home.css'; 
 import { Link } from 'react-router-dom';
 
 function Home() {
-  const getRandomElements = (array, count) => {
-    const shuffled = array.sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, count);
-  };
-
-  const randomRecommendations = getRandomElements(datas.characters, 4);
-  const [recomm] = useState(randomRecommendations); 
-
   return (
     <>
-      <div className='main-bannder flex mt-20'>
+      <div className='main-bannder flex'>
         <div className='banner'>
           <div className='banner-text-area'>
             <h3>Let's chat</h3>
@@ -31,14 +20,6 @@ function Home() {
             <img className='all-img' src='/pc-banner.png' alt='푸우' />
           </div>
         </div>
-      </div>
-      {/* 추천 캐릭터 */}
-      <div className='main-character'>
-        <h2 className='list-title main-title'>캐릭터랑 대화하기</h2>
-        <p className='main-list-describe'>
-          친구들이 당신을 기다리고 있어요{`:)`}
-        </p>
-        <CharacterList data={recomm} />
       </div>
       {/* 예문, 퀴즈 */}
       <div className='main-learn'>
@@ -62,7 +43,7 @@ function Home() {
         <div className='quiz-banner'>
           <h2 className='list-title main-title'>퀴즈 풀고 실력 높이기!</h2>
           <p className='main-list-describe'>
-            문장 완성하는 퀴즈를 풀며 즐겁게 공부해요~
+            문장 완성해 퀴즈 풀고 즐겁게 공부해요~
           </p>
           <div className='banner-img-txt quiz'>
             <div className='banner-txt'>

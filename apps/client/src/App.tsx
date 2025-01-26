@@ -13,7 +13,7 @@ import Mypage from './pages/Mypage';
 import MypagePW from './pages/MypagePW'
 import Spinner from './components/Spinner';
 import ReviewContent from './components/ReviewContent';
-import Wordquiz from './components/Wordquiz';
+import Wordquiz from './pages/Wordquiz';
 import './App.css';
 
 function App() {
