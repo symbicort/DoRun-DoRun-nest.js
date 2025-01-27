@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserCheckIdDTO } from "../../api/dtos/authDTO";
+import { UserCheckIdDTO } from "../../api/type/authDTO";
 import { userIdCheck } from "./action/authAction";
 
 const initialState: UserCheckIdDTO = {

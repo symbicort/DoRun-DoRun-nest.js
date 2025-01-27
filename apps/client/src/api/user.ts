@@ -1,4 +1,4 @@
-import { api } from './auth';
+import { api } from "./axios";
 
 export const fetchUserInfoAPI = async () => {
   const response = await api.get('/user/info');

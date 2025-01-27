@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { RegisterState } from '../../api/dtos/authDTO';
+import { RegisterState } from '../../api/type/authDTO';
 import { registerUser } from './action/authAction';
 
 const initialState: RegisterState = {

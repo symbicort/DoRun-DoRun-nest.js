@@ -1,7 +1,7 @@
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import '../assets/css/auth.css';
-import { RHFInput } from './RFHInput';
+import { RHFInput } from './common/RFHInput';
 import { loginUser } from '../store/features/action/authAction';
 import { useAppDispatch } from '../hooks/useRedux';
 

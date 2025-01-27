@@ -1,7 +1,7 @@
 import '../assets/css/auth.css';
-import LoginForm from '../components/LoginForm';
-import { LogoLink } from '../components/LogoLink';
-import { RegisterLinks } from '../components/RegisterLink';
+import { LogoLink } from '../components/common/LogoLink';
+import { RegisterLinks } from '../components/auth/RegisterLink';
+import LoginForm from '../components/auth/LoginForm';
 
 export default function Login() {  
   return (

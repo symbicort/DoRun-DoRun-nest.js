@@ -1,6 +1,6 @@
 import '../assets/css/auth.css';
-import { LogoLink } from '../components/LogoLink';
-import RegisterForm from '../components/RegisterForm';
+import RegisterForm from '../components/auth/RegisterForm';
+import { LogoLink } from '../components/common/LogoLink';
 
 export default function Register() {
 

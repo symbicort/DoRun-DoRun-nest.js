@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { LoginState} from '../../api/dtos/authDTO';
+import { LoginState} from '../../api/type/authDTO';
 import { loginUser, logoutUser } from './action/authAction';
 
 const initialState: LoginState = {

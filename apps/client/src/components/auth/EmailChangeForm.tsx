@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import { RHFInput } from './RFHInput';
+import { RHFInput } from './common/RFHInput';
 
 type FormData = {
   userId: string;

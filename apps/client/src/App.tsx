@@ -2,19 +2,19 @@ import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Layout from './Layout';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import NotFound from './components/NotFound';
 import Home from './pages/Home';
 import Review from './pages/Review';
 import Talk from './pages/Talk';
-import PreviewContent from './components/PreviewContent';
-import Chat from './pages/Chat';
+import LearningContent from './components/LearningContent';
+import Character from './pages/Character';
 import Learn from './pages/Learn';
 import Mypage from './pages/Mypage';
 import MypagePW from './pages/MypagePW'
-import Spinner from './components/Spinner';
-import ReviewContent from './components/ReviewContent';
+import ReviewContent from './pages/ReviewContent';
 import Wordquiz from './pages/Wordquiz';
 import './App.css';
+import Spinner from './components/common/Spinner';
+import Notfound from './components/common/NotFound';
 
 function App() {
 
@@ -26,11 +26,11 @@ function App() {
         <Route path='/talk/:id' element={<Talk />} />
         <Route path='/review' element={<Review />} />
         <Route path='/review/:id' element={<ReviewContent />} />
-        <Route path='/chat' element={<Chat />} />
+        <Route path='/character' element={<Character />} />
         <Route path='/learning' element={<Learn />} />
-        <Route path='/learning/:id' element={<PreviewContent />} />
+        <Route path='/learning/:id' element={<LearningContent />} />
         <Route path='/wordquiz' element={<Wordquiz />} />
-        <Route path='*' element={<NotFound />} />
+        <Route path='*' element={<Notfound />} />
       </Route>
       <Route path='/register' element={<Register />} />
       <Route path='/login' element={<Login />} />

@@ -60,7 +60,7 @@
 
 /* 예문, 퀴즈 소개 */
 .main-learn {
-  @apply sm:block lg:flex gap-4;
+  @apply sm:block lg:flex gap-4 mt-2;
 }
 
 .main-learn > div {
@@ -68,7 +68,7 @@
 }
 
 .banner-img-txt {
-  @apply relative flex justify-between box-content h-[32vh] pt-6 pb-4 px-8 rounded-xl;
+  @apply relative flex justify-between box-content h-[35vh] pt-6 pb-4 px-8 rounded-xl;
 }
 
 .banner-img-txt.study {

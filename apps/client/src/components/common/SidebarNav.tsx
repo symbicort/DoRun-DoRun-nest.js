@@ -3,9 +3,8 @@ import { navMenu } from '../constance';
 import '../assets/css/sidebarNav.css';
 
 export default function SidebarNav() {  
-
   const {pathname} = useLocation();
-  console.log(pathname);
+  
   return (
     <nav className='sidebar-nav'>
       <div className='container'>

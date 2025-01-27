@@ -1,21 +1,5 @@
-import axios from 'axios';
-import { LoginUserDTO, RegisterUserDTO } from './dtos/authDTO.ts'
-
-const API_URL = "https://43.203.227.36.sslip.io/server"
-
-// 토큰 관리
-export const api = axios.create({
-  baseURL: API_URL,
-  withCredentials: true,
-})
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers['Authorization'] = `Bearer ${token}`;
-  }
-  return config;
-});
+import { api } from './axios.ts';
+import { LoginUserDTO, RegisterUserDTO } from './type/authDTO.ts'
 
 // 로그인
 export const loginAPI = async (userdata: LoginUserDTO) => {
@@ -53,9 +37,7 @@ export const registerUserAPI = async (userData: RegisterUserDTO) => {
     const response = await api.post('/user/register', userData);
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data?.message || '회원가입 중 오류가 발생했습니다.');
-    }
+    console.error('register error:', error);
     throw error;
   }
 };

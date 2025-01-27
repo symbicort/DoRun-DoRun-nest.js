@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { loginAPI, logoutAPI, registerUserAPI, userIdCheckAPI } from "../../../api/auth";
-import { RegisterUserDTO, LoginUserDTO } from "../../../api/dtos/authDTO";
+import { RegisterUserDTO, LoginUserDTO } from "../../../api/type/authDTO";
 
 // 회원가입
 export const registerUser = createAsyncThunk(

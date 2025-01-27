@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { changeUserEmail, changeUserPassword, fetchUserInfo, withdrawUser } from './action/userAction';
-import { UserState } from '../../api/dtos/userDTO'
+import { UserState } from '../../api/type/userDTO'
 
 
 const initialState: UserState = {

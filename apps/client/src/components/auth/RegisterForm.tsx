@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/css/auth.css';
-import { RHFInput } from './RFHInput';
+import { RHFInput } from './common/RFHInput';
 import { registerUser, userIdCheck } from '../store/features/action/authAction';
 import { useAppDispatch } from '../hooks/useRedux';
 

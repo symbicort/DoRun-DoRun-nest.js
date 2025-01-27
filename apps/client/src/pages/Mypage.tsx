@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
 import { fetchUserInfo, changeUserEmail, withdrawUser } from '../store/features/action/userAction';
 import useUserData from '../components/UserData';
-import { EmailChangeForm } from '../components/EmailChangeForm';
-import { LogoLink } from '../components/LogoLink';
+import { LogoLink } from '../components/common/LogoLink';
+import { EmailChangeForm } from '../components/auth/EmailChangeForm';
 
 type FormData = {
   userId: string;

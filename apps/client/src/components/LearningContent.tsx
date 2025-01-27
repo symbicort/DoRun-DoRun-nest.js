@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { LuRepeat } from 'react-icons/lu';
-// import { HiSpeakerWave } from 'react-icons/hi2';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Spinner from './Spinner';
+import Spinner from './common/Spinner';
 
 interface Sentence {
   meaning: string;
@@ -24,7 +23,7 @@ interface PreviewData {
   used: boolean;
 }
 
-export default function PreviewContent() {
+export default function LearningContent() {
   // 로딩
   const [isLoading, setIsLoading] = useState(true);
   // 응답 데이터 담기
