@@ -1,7 +1,7 @@
-import HeaderNav from './HeaderNav';
 import { FaBars } from 'react-icons/fa6';
-import '../assets/css/header.css';
 import { LogoLink } from './LogoLink';
+import { HeaderNav } from './HeaderNav';
+import '../../assets/css/header.css';
 
 interface HeaderProps {
   handler: () => void;

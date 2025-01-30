@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import Lottie from 'lottie-react';
-import loadingCat from '../../cat_spinner.json';
-import '../assets/css/spinner.css';
+import loadingCat from '../../../cat_spinner.json';
+import '../../assets/css/spinner.css';
 
 
 
-function Spinner({ loadingText }) {
+function Spinner({ loadingText } : {loadingText : string} ) {
   const [fadeIn, setFadeIn] = useState(false);
 
   useEffect(() => {

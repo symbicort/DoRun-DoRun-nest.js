@@ -12,6 +12,7 @@ export const ReviewList = ({ uniqueDates, reviewDatas, dummyDatas }: Props) => {
       <div className='review-conversation-lists'>
         {uniqueDates.map((date) => {
           const reviewForDate = reviewDatas.find(data => data.createdAt === date);
+          console.log('reviewForDate', reviewForDate)
           return (
             <div key={date}>
               <div className='date'>{date}</div>

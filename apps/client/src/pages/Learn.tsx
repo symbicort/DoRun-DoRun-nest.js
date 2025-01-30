@@ -9,6 +9,7 @@ export default function Learn() {
     const location = useLocation();
 
     const locationId = Number(location.hash.split("#std")[1]) || 0;
+    console.log('locationId', locationId)
     const [activeTab, setActiveTab] = useState(locationId);
 
     const tabHandler = (tabId: number) => {

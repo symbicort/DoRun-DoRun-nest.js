@@ -1,6 +1,6 @@
 import { NavLink, Link, useLocation } from 'react-router-dom';
-import { navMenu } from '../constance';
-import '../assets/css/sidebarNav.css';
+import { navMenu } from '../../constance';
+import '../../assets/css/sidebarNav.css';
 
 export default function SidebarNav() {  
   const {pathname} = useLocation();

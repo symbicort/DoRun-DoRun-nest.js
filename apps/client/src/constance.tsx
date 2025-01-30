@@ -3,7 +3,7 @@ import { CgMenuGridR } from 'react-icons/cg';
 import { BiSolidChat } from 'react-icons/bi';
 import { MdLibraryBooks } from 'react-icons/md';
 import Wordquiz from './pages/Wordquiz';
-import Preview from './components/Preview';
+import Preview from './pages/Preview';
 
 
 //NavigationBar

@@ -1,11 +1,10 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
-// import { userIdCheckAPI } from '../api/auth';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../assets/css/auth.css';
-import { RHFInput } from './common/RFHInput';
-import { registerUser, userIdCheck } from '../store/features/action/authAction';
-import { useAppDispatch } from '../hooks/useRedux';
+import { RHFInput } from '../common/RFHInput';
+import { registerUser, userIdCheck } from '../../store/features/action/authAction';
+import { useAppDispatch } from '../../hooks/useRedux';
+import '../../assets/css/auth.css';
 
 type FormData = {
   username: string;

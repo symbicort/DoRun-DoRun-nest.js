@@ -5,7 +5,6 @@ import { LoginUserDTO, RegisterUserDTO } from './type/authDTO.ts'
 export const loginAPI = async (userdata: LoginUserDTO) => {
   try {
     const response = await api.post('/user/login', userdata);
-    console.log('login Api', response)
     if (response.data.result === false) {
       throw new Error(response.data.msg);
     }

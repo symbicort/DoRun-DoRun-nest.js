@@ -12,12 +12,11 @@ import Mypage from './pages/Mypage';
 import MypagePW from './pages/MypagePW'
 import ReviewContent from './pages/ReviewContent';
 import Wordquiz from './pages/Wordquiz';
-import './App.css';
-import Spinner from './components/common/Spinner';
 import Notfound from './components/common/NotFound';
+import Spinner from './components/common/Spinner';
+import './App.css';
 
 function App() {
-
   return (
     <BrowserRouter>
     <Routes>

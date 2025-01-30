@@ -7,7 +7,6 @@ interface Props {
 }
 
 export const ReviewItem = ({ data, dummy }: Props) => {
-    console.log('data', data)
   const time = data.createdAt.split(' ');
   const selectedDummy = dummy.find((item) => item.name === data.ai);
   const dummyImg = selectedDummy?.img;

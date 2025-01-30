@@ -1,5 +1,5 @@
 import { VscInfo } from 'react-icons/vsc';
-import '../assets/css/footer.css';
+import '../../assets/css/footer.css';
 
 export default function Footer() {
   return (

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
-import notfound from '../../notfound.json';
+import notfound from '../../../notfound.json';
 
 export default function Notfound() {
 	const navigate = useNavigate();

@@ -1,149 +1,52 @@
-import { useState, useEffect } from 'react';
-import { LuRepeat } from 'react-icons/lu';
+import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { LuRepeat } from 'react-icons/lu';
 import Spinner from './common/Spinner';
-
-interface Sentence {
-  meaning: string;
-  mission: string;
-  missionId: string;
-  learned: boolean;
-}
-
-interface PreviewData {
-  id: string;
-  no: number;
-  sentence: string;
-  sentence_translation: string;
-  similar: string[];
-  similar_translation: string[];
-  dialogue: string[];
-  dialogue_translation: string[];
-  used: boolean;
-}
+import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
+import { getAiExample, getSentences, learnSentence } from '../store/features/action/learningAction';
 
 export default function LearningContent() {
-  // 로딩
-  const [isLoading, setIsLoading] = useState(true);
-  // 응답 데이터 담기
-  const [sentences, setSentences] = useState<Sentence[]>([]);
-  // 하루 3문장 선택한 문장 담기
-  const [selectedSentenceData, setSelectedSentenceData] =
-    useState<PreviewData | null>(null);
   const { id: urlID } = useParams<{ id: string }>();
   const navigate = useNavigate();
-
-  // 학습하기에서 학습한 문장 받아오기
-  async function getLearningSentence() {
-    try {
-      const level = 'lv' + urlID![5];
-      const response = await axios.get(
-        // 배포 시 URL 재설정
-        'https://43.203.227.36.sslip.io/server/learn',
-        {
-          params: { course: level },
-          withCredentials: true
-        },
-      );
-      
-      if (!response.data) {
-        if (
-          confirm(
-            `${urlID} 에서의 학습을 모두 완료했습니다! 캐릭터와 배운 표현을 사용해보세요.`
-          )
-        ) {
-          navigate('/chat');
-        }
-        return;
-      }
-      await setSentences(response.data);
-    } catch (error) {
-      console.error('getLearningSentence 받기 에러', error);
-    }
-  }
-
-  // AI한테 하루 3문장 관련 예문 받아오기
-  async function getAiExample(sentence: Sentence) {
-    try {
-      setIsLoading(true);
-      
-      const response = await axios.get(
-        // 배포 시 URL 재설정
-        'https://43.203.227.36.sslip.io/server/practice',
-        {
-          withCredentials: true,
-          params: {
-            expression: sentence.mission,
-            meaning: sentence.meaning,
-            level: Number(urlID![5]),
-          },
-          
-        },
-      );
-
-      setSelectedSentenceData(response.data);
-    } catch (error) {
-      console.error('getAiExample 받기 실패', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  const dispatch = useAppDispatch();
+  const { sentences, selectedSentenceData, isLoading } = useAppSelector((state) => state.learning);
 
   useEffect(() => {
-    getLearningSentence();
-  }, []);
+    if (urlID) {
+      const level = 'lv' + urlID[5];
+      dispatch(getSentences(level));
+    }
+  }, [dispatch, urlID]);
 
   useEffect(() => {
     if (sentences.length > 0 && !sentences[0].learned) {
-      getAiExample(sentences[0]);
+      dispatch(getAiExample({ sentence: sentences[0], level: Number(urlID![5]) }));
     }
-  }, [sentences]);
+  }, [sentences, dispatch, urlID]);
 
-  // 학습완료 버튼
   const handleLearnedButtonClick = async () => {
-    try {
+    if (selectedSentenceData) {
       const index = sentences.findIndex(
-        (sentence) =>
-          sentence.mission === selectedSentenceData?.sentence.substring(5)
+        (sentence) => sentence.mission === selectedSentenceData.sentence.substring(5)
       );
-      await axios.post(
-        // 배포 시 URL 재설정
-        'https://43.203.227.36.sslip.io/server/learned', 
-        {
-        mission_id: sentences[index].missionId,
-      },{ withCredentials: true });
-
-      const updatedSentences = [...sentences];
-      updatedSentences[index] = {
-        ...updatedSentences[index],
-        learned: true,
-      };
-      await setSentences(updatedSentences);
-
-      // 미학습 문장 확인하기
-      const remainingUnlearnedSentences = updatedSentences.filter(
-        (sentence) => !sentence.learned
-      );
-      if (remainingUnlearnedSentences.length === 0) {
-        if (
-          confirm('오늘 학습 완료! 캐릭터와 오늘 배운 내용을 사용해보세요!')
-        ) {
-          navigate('/chat');
+      if (index !== -1) {
+        await dispatch(learnSentence(sentences[index].missionId));
+        
+        const remainingUnlearnedSentences = sentences.filter((sentence) => !sentence.learned);
+        if (remainingUnlearnedSentences.length === 0) {
+          if (confirm('오늘 학습 완료! 캐릭터와 오늘 배운 내용을 사용해보세요!')) {
+            navigate('/chat');
+          }
+        } else {
+          dispatch(getAiExample({ sentence: remainingUnlearnedSentences[0], level: Number(urlID![5]) }));
         }
-      } else {
-        const nextUnlearnedSentence = remainingUnlearnedSentences[0];
-        getAiExample(nextUnlearnedSentence);
       }
-    } catch (error) {
-      console.error('학습 완료 처리 실패', error);
     }
   };
 
   return (
     <section className='preview-sentence'>
       <div className='preview-sentence-container'>
-        {/* 예문 불러오기 로딩 알림 */}
         {isLoading ? (
           <div className='flex m-auto w-2/3 h-1/3 justify-center items-center mt-10 mb-20'>
             <Spinner loadingText='AI가 예문을 생성중...' />
@@ -157,7 +60,6 @@ export default function LearningContent() {
                   selectedSentenceData.sentence_translation}
               </p>
             </div>
-            {/* 예시 구문 - 3문장 랜덤 반복 출력 */}
             <div className='sample-sentence'>
               {selectedSentenceData && (
                 <div className='example' key={selectedSentenceData.id}>
@@ -172,13 +74,10 @@ export default function LearningContent() {
                                 sentence.mission ===
                                 selectedSentenceData?.sentence.substring(5)
                             );
-                            getAiExample(sentences[index]);
+                            dispatch(getAiExample({ sentence: sentences[index], level: Number(urlID![5]) }));
                           }}
                         />
                       </button>
-                      {/* <button type='button'>
-                        <HiSpeakerWave />
-                      </button> */}
                     </div>
                     <ul>
                       {selectedSentenceData.similar.map((similar, index) => (
@@ -191,7 +90,6 @@ export default function LearningContent() {
                       ))}
                     </ul>
                   </div>
-                  {/* 예시 대화문 - A,B 1세트 */}
                   <div className='dialog'>
                     <p className='sentence-sub-title'>대화문</p>
                     <p className='english'>
@@ -212,13 +110,10 @@ export default function LearningContent() {
             </div>
           </div>
         )}
-        {/* 학습완료 내역 대화창 미션 리스트에 정렬시키기 */}
         <button
           type='button'
           className='bg-[var(--highlight-color)] text-white'
-          onClick={async () => {
-            handleLearnedButtonClick();
-          }}
+          onClick={handleLearnedButtonClick}
         >
           학습 완료
         </button>
@@ -230,7 +125,7 @@ export default function LearningContent() {
               <li
                 key={i}
                 onClick={() => {
-                  getAiExample(sentence);
+                  dispatch(getAiExample({ sentence, level: Number(urlID![5]) }));
                 }}
               >
                 <span

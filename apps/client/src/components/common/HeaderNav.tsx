@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 import { FaBell } from 'react-icons/fa';
-import useUserData from '../components/UserData';
-import '../assets/css/headerNav.css';
 import { useEffect } from 'react';
-import { logoutUser } from '../store/features/action/authAction';
-import { useAppDispatch } from '../hooks/useRedux';
+import useUserData from '../UserData';
+import { logoutUser } from '../../store/features/action/authAction';
+import { useAppDispatch } from '../../hooks/useRedux';
+import '../../assets/css/headerNav.css';
 
-export default function Header() {
+export const HeaderNav = () => {
   const {
     user,
     setUser,
