@@ -63,11 +63,11 @@
   </tr>
   <tr>
     <td>github 주소</td>
-    <td><a href="https://github.com/ghtjd1358/DoRun-DoRun">https://github.com/ghtjd1358/DoRun-DoRun</a></td>
+    <td><a href="https://github.com/symbicort/DoRun-DoRun-nest.js/tree/main">https://github.com/ghtjd1358/DoRun-DoRun</a></td>
   </tr>
   <tr>
     <td>배포 주소</td>
-    <td><a href="https://43.201.109.188.sslip.io/">https://43.201.109.188.sslip.io/</td>
+    <td><a href="https://43.201.109.188.sslip.io/">https://43.201.109.188.sslip.io/ <- 비용 건으로 서버 비활성화 </td>
   </tr>
 </table><br>
 
